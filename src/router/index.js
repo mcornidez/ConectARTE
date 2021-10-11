@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: '/registro',
-    name: 'Registro',
+    name: 'Register',
     component: () => import(/* webpackChunkName: "Register" */ '../views/Register.vue')
   },
   {
@@ -50,9 +50,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "Register" */ '../views/ForgotPassword.vue')
   },
   {
-    path: '/olvidomail',
-    name: 'ForgotMail',
-    component: () => import(/* webpackChunkName: "Register" */ '../views/ForgotMail.vue')
+    path: '/olvidousuario',
+    name: 'ForgotUser',
+    component: () => import(/* webpackChunkName: "Register" */ '../views/ForgotUser.vue')
   },
   {
     path: '*',

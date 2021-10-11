@@ -1,14 +1,16 @@
 <template>
 <div id="nav">
 <div class="d-flex align-center">
-  <v-img
-      alt="Logo ConectARTE"
-      class="mr-2 pa-4"
-      contain
-      src="../assets/PageLogo.png"
-      transition="scale-transition"
-      width="250"
-  />
+  <router-link to="/">
+    <v-img
+        alt="Logo ConectARTE"
+        class="mr-2 pa-4"
+        contain
+        src="../assets/PageLogo.png"
+        transition="scale-transition"
+        width="250"
+    />
+  </router-link>>
 </div>
 <div class="d-flex align-center">
   <v-btn

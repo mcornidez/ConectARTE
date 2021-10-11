@@ -2,26 +2,25 @@
   <div id="background">
     <div id="pageTitle">
       <br>
-      <b>¿Olvidaste tu contraseña?</b>
+      <b>¿Olvidaste tu usuario?</b>
     </div>
     <div class="form">
       <br>
-      <input required v-model="user" type="text" placeholder="Introduzca su usuario" class="input"/>
-      <br>
       <input required v-model="email" type="email" placeholder="Introduzca su mail" class="input"/>
       <br>
-      <button @click="sendForm" class="btn">Enviar link de recupero de contraseña</button>
+      <button @click="sendForm" class="btn">Enviar link de recupero de usuario</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ForgotPassword"
+  name: "ForgotMail"
 }
 </script>
 
 <style scoped>
+
 #background{
   margin-top: 15vh;
   background-image: url("../assets/FondoHome.png");
@@ -46,4 +45,6 @@ export default {
   width: 80%;
   display: inline-block;
 }
+
+
 </style>
