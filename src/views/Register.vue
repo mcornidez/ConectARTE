@@ -75,10 +75,10 @@ export default {
   justify-content: center;
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
+  background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
   height:100vh;
-  font-family: "Trebuchet MS", sans-serif;
 }
 
 .form{

@@ -46,12 +46,14 @@ export default {
 
 <style scoped>
 #myagenda{
-  margin-top: 15vh;
+  position:center;
+  justify-content: center;
   background-image: url("../assets/FondoHome.png");
-  height: 100vh;
   background-size: cover;
-  font-family: "Trebuchet MS", sans-serif;
-  color: black;
+  background-attachment: fixed;
+  margin-top: 15vh;
+  padding: 0;
+  height:100vh;
 }
 
 #pageTitle{

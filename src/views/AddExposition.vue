@@ -91,11 +91,14 @@ export default {
 }
 
 #background{
-  margin-top: 15vh;
+  position:center;
+  justify-content: center;
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
-  background-position: center;
+  margin-top: 15vh;
+  padding: 0;
+  height:100vh;
 }
 
 </style>

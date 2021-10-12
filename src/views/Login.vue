@@ -16,7 +16,7 @@
       <button @click="login" class="btn">Ingresar</button>
       <br>
       <br>
-      <router-link :to="{name: 'ForgotUser'}">¿Olvidó su mail?</router-link>
+      <router-link :to="{name: 'ForgotUser'}">¿Olvidó su usuario?</router-link>
       <br>
       <br>
       <router-link :to="{name: 'ForgotPassword'}">¿Olvidó su contraseña?</router-link>
@@ -73,10 +73,10 @@ export default {
   justify-content: center;
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
+  background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
   height:100vh;
-  font-family: "Trebuchet MS", sans-serif;
 }
 
 .form{
