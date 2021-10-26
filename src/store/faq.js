@@ -21,7 +21,7 @@ export default{
         },
         {
             id:4,
-            q:"¿Como funciona?",
+            q:"¿Cómo funciona?",
             a: "PushApp ofrece opciones tanto para crear rutinas personalizadas como para explorar rutinas prearmadas." +
                 "Nuestra intención es que el usuario encuentre (o en su defecto pueda crear) una rutina cuyo tiempo y" +
                 " dificultad sean exactamente las que busca."
