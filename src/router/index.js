@@ -23,6 +23,11 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/exposiciones/:slug',
+    name: 'Exposition',
+    component: () => import(/* webpackChunkName: "exposition" */ '../views/Exposition.vue'),
+  },
+  {
     path: '/contacto',
     name: 'Contact',
     component: () => import(/* webpackChunkName: "help" */ '../views/Contact.vue'),
@@ -58,7 +63,8 @@ const routes = [
     path: '*',
     name: 'NotFound',
     component: () => import(/* webpackChunkName: "notFound" */ '../views/NotFound.vue')
-  }
+  },
+
 ]
 
 const router = new VueRouter({
