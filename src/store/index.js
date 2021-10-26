@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import security from '@/store/module/security';
+// import security from '@/store/module/security';
 
 Vue.use(Vuex)
 

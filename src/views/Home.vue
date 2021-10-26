@@ -30,12 +30,14 @@
 </template>
 
 <script>
-import store from "@/store"
+import db from "../firebase/initFirebase";
+import {collection, getDocs} from "firebase/firestore/lite";
+
 export default {
   name: 'Home',
   data(){
     return {
-      expositions: store.expositions,
+      expositions: [],
       search: "",
     }
   },
@@ -45,8 +47,18 @@ export default {
           return exposition.name.match(this.search) || exposition.venue.match(this.search) || exposition.artist.match(this.search);
       })
     }
+  },
+  methods: {
+    async getMuestras() {
+      const citiesCol = collection(db, "muestras");
+      const citySnapshot = await getDocs(citiesCol);
+      return citySnapshot.docs.map(doc => doc.data());
+    },
+  },
+  async beforeMount() {
+    this.expositions = await this.getMuestras();
   }
-}
+};
 </script>
 
 <style scoped>
