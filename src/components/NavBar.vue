@@ -10,7 +10,7 @@
         transition="scale-transition"
         width="250"
     />
-  </router-link>>
+  </router-link>
 </div>
 <div class="d-flex align-center">
   <v-btn
