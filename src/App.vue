@@ -10,16 +10,23 @@
 </template>
 
 <script>
+import {onAuthStateChanged, getAuth} from "firebase/auth";
+import db from "./firebase/initFirebase";
   import NavBar from './components/NavBar';
   export default {
+    db,
     name: 'App',
     components: {
       NavBar
     },
-    data: () => ({
-    //
-    }),
   };
+  onAuthStateChanged(getAuth(), user => {
+    if (user) {
+      localStorage.setItem("USER", user.email);
+    } else {
+      localStorage.removeItem("USER");
+    }
+  })
 </script>
 
 <style lang="scss">

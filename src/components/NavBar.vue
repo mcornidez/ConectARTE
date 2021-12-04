@@ -43,11 +43,17 @@
 
 <div class="d-flex align-center">
   <v-btn
-      :to="{name: 'MyProfile'}"
+      :to="{name: 'Login'}"
       text
       class="btn">
     <v-icon style="color: white; font-size:35px;">mdi-account-outline</v-icon>
     <span class="font">Iniciar Sesión</span>
+  </v-btn>
+  <v-btn
+      text
+      class="btn"
+      @click="logout">
+    <span class="font">Cerrar Sesión</span>
   </v-btn>
 </div>
 </div>
@@ -55,8 +61,18 @@
 
 <script>
 
+import {signOut, getAuth} from "firebase/auth";
 export default {
   name: "NavBar.vue",
+  methods: {
+    async logout() {
+      const auth = getAuth();
+      await signOut(auth);
+      if (this.$route.path !== "/") {
+        this.$router.push({name: 'Home'});
+      }
+    }
+  }
 }
 </script>
 

@@ -5,18 +5,15 @@
       <b>Iniciar Sesión</b>
     </div>
     <div class="form">
-      <label for="username">Usuario</label>
+      <label for="username">Mail</label>
       <br>
-      <input required v-model="username" type="text" id="username" placeholder="Ingrese su usuario" class="input"/>
+      <input required v-model="email" type="text" id="username" placeholder="Ingrese su mail" class="input"/>
       <br>
       <label for="password">Contraseña</label>
       <br>
       <input required v-model="password" type="password" id="password" placeholder="Ingrese su contraseña" class="input"/>
       <br>
       <button @click="login" class="btn">Ingresar</button>
-      <br>
-      <br>
-      <router-link :to="{name: 'ForgotUser'}">¿Olvidó su usuario?</router-link>
       <br>
       <br>
       <router-link :to="{name: 'ForgotPassword'}">¿Olvidó su contraseña?</router-link>
@@ -33,24 +30,22 @@
 </template>
 
 <script>
+import {signInWithEmailAndPassword, getAuth} from "firebase/auth";
 
-import store from '@/store'
 export default {
   name: "Login",
   data(){
     return {
-      username: null,
+      email: null,
       password: null,
     }
   },
   methods: {
-    login() {
-      store.user = this.username;
+    async login() {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, this.email, this.password);
       this.$router.push({name: 'MyAgenda'});
     },
-    logout() {
-      store.user = null
-    }
   },
 }
 </script>

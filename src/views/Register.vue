@@ -30,8 +30,7 @@
 </template>
 
 <script>
-import store from "@/store";
-
+import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
 export default {
   name: "Register",
   data(){
@@ -44,13 +43,10 @@ export default {
     }
   },
   methods: {
-    register(){
+    async register(){
       //authenticate
-      store.name = this.name;
-      store.surname = this.surname;
-      store.mail = this.mail;
-      store.password = this.password;
-      store.user = this.user;
+      const auth = getAuth();
+      await createUserWithEmailAndPassword(auth, this.mail, this.password);
       this.$router.push({name: 'Home'});
     }
   }

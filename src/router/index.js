@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
-import store from "@/store";
 
 Vue.use(VueRouter)
 
@@ -55,11 +54,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "Register" */ '../views/ForgotPassword.vue')
   },
   {
-    path: '/olvidousuario',
-    name: 'ForgotUser',
-    component: () => import(/* webpackChunkName: "Register" */ '../views/ForgotUser.vue')
-  },
-  {
     path: '*',
     name: 'NotFound',
     component: () => import(/* webpackChunkName: "notFound" */ '../views/NotFound.vue')
@@ -73,8 +67,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const user = localStorage.getItem("USER");
   if (to.matched.some(route => route.meta.requiresAuth)) {
-    if (!store.user) {
+    if (!user) {
       next({ name: "Login", query: { redirect: to.fullPath } });
     } else {
       next();
