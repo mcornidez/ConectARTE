@@ -10,7 +10,7 @@
     <div class="form">
       <br>
       <label for="name">Nombre/Título: </label>
-      <input v-model="name" type="text" id="name" placeholder="Ingrese el nombre" class="input"/>
+      <input v-model="title" type="text" id="name" placeholder="Ingrese el nombre" class="input"/>
       <br>
       <label for="description">Descripción/Texto curatorial: </label>
       <input v-model="description" type="text" id="description" placeholder="Ingrese una descripción" class="input"/>
@@ -54,8 +54,51 @@
 </template>
 
 <script>
+import db from "../firebase/initFirebase";
+import {setDoc, doc, collection} from "firebase/firestore/lite";
+
 export default {
-  name: "AddExposition"
+  name: "AddExposition",
+  data() {
+    return {
+      id: null,
+      title: "",
+      description: "",
+      initdate: "",
+      enddate: "",
+      link: "",
+      venueName: "",
+      address: "",
+      phone: "",
+      webpage: "",
+      inittime: "",
+      endtime: ""
+    }
+  },
+  methods: {
+    async registerExpo() {
+      let docRef;
+      if (this.id === null)
+        docRef = doc(collection(db, "muestras"));
+      else
+        docRef = doc(db, "muestras", this.id);
+      alert(docRef);
+      const exhibition = {
+        name: this.title,
+        description: this.description,
+        initdate: this.initdate,
+        enddate: this.enddate,
+        link: this.link,
+        venueName: this.venueName,
+        address: this.address,
+        phone: this.phone,
+        webpage: this.webpage,
+        inittime: this.inittime,
+        endtime: this.endtime
+      }
+      await setDoc(docRef, exhibition);
+    }
+  }
 }
 </script>
 
