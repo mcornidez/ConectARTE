@@ -28,6 +28,7 @@
   <v-btn
       :to="{name: 'AddExposition'}"
       text
+      v-show="$isArtist"
       class="btn">
     <span class="font">Registrá tu muestra</span>
   </v-btn>
@@ -76,6 +77,7 @@ export default {
   name: "NavBar.vue",
   computed: mapGetters("user", {
     $isLoggedIn: "isLoggedIn",
+    $isArtist: "isArtist"
   }),
   methods: {
     async logout() {
