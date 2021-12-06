@@ -30,7 +30,9 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
+import db from "../firebase/initFirebase"
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {doc, setDoc} from "firebase/firestore";
 export default {
   name: "Register",
   data(){
@@ -43,11 +45,17 @@ export default {
     }
   },
   methods: {
-    async register(){
-      //authenticate
+    async register() {
       const auth = getAuth();
-      await createUserWithEmailAndPassword(auth, this.mail, this.password);
-      this.$router.push({name: 'Home'});
+      const credentials = await createUserWithEmailAndPassword(auth, this.mail, this.password);
+      await setDoc(doc(db, "users", credentials.user.uid), {
+        name: this.name,
+        surname: this.surname,
+      });
+      updateProfile(credentials.user, {
+        displayName: this.user,
+      });
+      await this.$router.push({name: 'Home'});
     }
   }
 }
