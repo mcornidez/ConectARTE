@@ -8,7 +8,7 @@
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
     <div class="grid-container">
-      <div v-for="exposition in expositions" :key="exposition.name" class="single-exposition">
+      <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
         <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
           <div class="grid-item">
             <div class="expoContainer">
@@ -44,7 +44,7 @@ export default {
   computed: {
     filteredExpositions: function(){
       return this.expositions.filter((exposition) => {
-          return exposition.name.match(this.search) || exposition.venue.match(this.search) || exposition.artist.match(this.search);
+          return exposition.name.match(this.search) || exposition.description.match(this.search);
       })
     }
   },

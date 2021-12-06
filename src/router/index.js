@@ -45,7 +45,7 @@ const routes = [
     path: '/registratumuestra',
     name: 'AddExposition',
     component: () => import(/* webpackChunkName: "Register" */ '../views/AddExposition.vue'),
-    meta: { requiresAuth: true }
+    //meta: { requiresAuth: true }
   },
   {
     path: '/miperfil',

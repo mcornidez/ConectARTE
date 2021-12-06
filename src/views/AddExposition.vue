@@ -96,54 +96,49 @@ export default {
       phone: "",
       webpage: "",
       inittime: "",
-      endtime: ""
-    }
-  },
-  methods: {
-    async registerExpo() {
-      let docRef;
-      if (this.id === null)
-        docRef = doc(collection(db, "muestras"));
-      else
-        docRef = doc(db, "muestras", this.id);
-      alert(docRef);
-      const exhibition = {
-        name: this.title,
-        description: this.description,
-        image: this.image,
-        initdate: this.initdate,
-        enddate: this.enddate,
-        link: this.link,
-        venueName: this.venueName,
-        address: this.address,
-        phone: this.phone,
-        webpage: this.webpage,
-        inittime: this.inittime,
-        endtime: this.endtime
-      }
-      await setDoc(docRef, exhibition);
-    }
-  }
-  name: "AddExposition",
-  data(){
-    return {
+      endtime: "",
       files: [],
       uploadFiles: [],
-    };
+    }
   },
   methods: {
+    async registerExpo(file) {
+      if (this.validate(file) === "") {
+        let docRef;
+        if (this.id === null)
+          docRef = doc(collection(db, "muestras"));
+        else
+          docRef = doc(db, "muestras", this.id);
+        alert(docRef);
+        const exhibition = {
+          name: this.title,
+          description: this.description,
+          image: this.image,
+          initdate: this.initdate,
+          enddate: this.enddate,
+          link: this.link,
+          venueName: this.venueName,
+          address: this.address,
+          phone: this.phone,
+          webpage: this.webpage,
+          inittime: this.inittime,
+          endtime: this.endtime
+        }
+        await setDoc(docRef, exhibition);
+      }
+    },
     OnFileSelected(){
       const files = this.$refs.files.files;
       this.uploadFiles = [...this.uploadFiles, ...files];
 
       this.files = [
-          ...this.files,
-          ..._.map(files, file => ({
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            invalidMessage: this.validate(file)
-          }))
+        ...this.files,
+        ..._.map(files, file => ({
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          invalidMessage: this.validate(file)
+        }))
       ]
     },
     validate(file){
@@ -155,14 +150,8 @@ export default {
         return "Sólo válidos archivos .jpeg y .png";
       return null;
     },
-    registerExpo(){
-      const formData = new FormData();
-      _.forEach(this.uploadFiles, file=> {
-          if (this.validate(file) === "")
-            formData.append('files', file);
-      });
-    }
   }
+
 }
 </script>
 
