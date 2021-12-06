@@ -31,7 +31,7 @@
 
 <script>
 import db from "../firebase/initFirebase";
-import {collection, getDocs} from "firebase/firestore/lite";
+import {onSnapshot, collection} from "firebase/firestore"
 
 export default {
   name: 'Home',
@@ -51,12 +51,16 @@ export default {
   methods: {
     async getMuestras() {
       const citiesCol = collection(db, "muestras");
-      const citySnapshot = await getDocs(citiesCol);
-      return citySnapshot.docs.map(doc => doc.data());
+      await onSnapshot(citiesCol, (querySnapshot) => {
+        this.expositions = [];
+        querySnapshot.forEach((doc) => {
+          this.expositions.push(doc.data())
+        })
+      });
     },
   },
-  async beforeMount() {
-    this.expositions = await this.getMuestras();
+  beforeMount() {
+    this.getMuestras();
   }
 };
 </script>
