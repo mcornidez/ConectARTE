@@ -27,6 +27,24 @@
       <br>
       <label for="link">Links de interés: </label>
       <input v-model="link" type="text" id="link" placeholder="Ingrese la URL" class="input"/>
+      <br>
+      <label for="pictures">Subir imágenes: </label>
+      <div class="input">
+        <input multiple type="file" ref="files" id="pictures" @change="OnFileSelected"/>
+        <div v-for="(file, index) in files" :key="index">
+          <div class="level-left">
+            <div class="level-item">
+              {{file.name}}
+              <span v-if="file.invalidMessage"> &nbsp;- {{file.invalidMessage}}</span>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <a @click.prevent="files.splice(index, 1); uploadFiles.splice(index, 1);" class="delete"/>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="pageSubtitle">
       <br>
@@ -61,6 +79,7 @@
 import db from "../firebase/initFirebase";
 import {setDoc, doc, collection} from "firebase/firestore/lite";
 
+import _ from 'lodash';
 export default {
   name: "AddExposition",
   data() {
@@ -103,6 +122,45 @@ export default {
         endtime: this.endtime
       }
       await setDoc(docRef, exhibition);
+    }
+  }
+  name: "AddExposition",
+  data(){
+    return {
+      files: [],
+      uploadFiles: [],
+    };
+  },
+  methods: {
+    OnFileSelected(){
+      const files = this.$refs.files.files;
+      this.uploadFiles = [...this.uploadFiles, ...files];
+
+      this.files = [
+          ...this.files,
+          ..._.map(files, file => ({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            invalidMessage: this.validate(file)
+          }))
+      ]
+    },
+    validate(file){
+      const MAX_SIZE = 1000000;
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (file.size > MAX_SIZE)
+        return `Tamaño máximo permitido es ${MAX_SIZE/1000}Kb`;
+      if (!allowedTypes.includes(file.type))
+        return "Sólo válidos archivos .jpeg y .png";
+      return null;
+    },
+    registerExpo(){
+      const formData = new FormData();
+      _.forEach(this.uploadFiles, file=> {
+          if (this.validate(file) === "")
+            formData.append('files', file);
+      });
     }
   }
 }

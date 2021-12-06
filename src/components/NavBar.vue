@@ -32,6 +32,12 @@
     <span class="font">Registrá tu muestra</span>
   </v-btn>
   <v-btn
+      :to="{name: 'VirtualTours'}"
+      text
+      class="btn">
+    <span class="font">Muestras Virtuales</span>
+  </v-btn>
+  <v-btn
       :to="{name: 'Contact'}"
       text
       class="btn">
@@ -84,6 +90,7 @@ export default {
   background-color: black;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 .btn {
   margin: 15px;

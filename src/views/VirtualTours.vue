@@ -1,33 +1,22 @@
 <template>
-  <div id="myagenda">
+  <div id="virtualTours">
     <div id="pageTitle">
       <br/>
-      <b>Mi Agenda</b>
+      <b>Muestras Virtuales</b>
     </div>
-    <div id="searchBar">
-      <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
-    </div>
-    <div class="grid-container">
-      <div v-for="exposition in expositions" :key="exposition.name" class="single-exposition">
-        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
-          <div class="grid-item">
-            <img :src='exposition.image'/>
-            <h2>{{exposition.name}}</h2>
-            <p>{{exposition.description}}</p>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div>
-    </div>
+    <GoogleMap/>
   </div>
 </template>
 
 <script>
-import store from "@/store";
+import store from "../store";
+import GoogleMap from "../components/GoogleMaps";
 
 export default {
-  name: "MyAgenda",
+  name: "VirtualTours",
+  components: {
+    GoogleMap
+  },
   data(){
     return {
       expositions: store.myexpositions,
@@ -35,17 +24,12 @@ export default {
     }
   },
   computed: {
-    filteredExpositions: function(){
-      return this.expositions.filter((exposition) => {
-        return exposition.name.match(this.search) || exposition.venue.match(this.search) || exposition.artist.match(this.search);
-      })
-    }
   }
 }
 </script>
 
 <style scoped>
-#myagenda{
+#virtualTours{
   position:center;
   justify-content: center;
   background-image: url("../assets/FondoHome.png");
@@ -65,12 +49,6 @@ export default {
   min-width: 30vw;
   max-width: 90vw;
   margin: auto;
-}
-
-#searchBar{
-  position: center;
-  width: 40%;
-  margin-left: 450px;
 }
 
 img {

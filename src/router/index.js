@@ -27,6 +27,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "exposition" */ '../views/Exposition.vue'),
   },
   {
+    path: '/muestrasvirtuales',
+    name: 'VirtualTours',
+    component: () => import(/* webpackChunkName: "exposition" */ '../views/VirtualTours.vue'),
+  },
+  {
     path: '/contacto',
     name: 'Contact',
     component: () => import(/* webpackChunkName: "help" */ '../views/Contact.vue'),

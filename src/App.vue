@@ -1,9 +1,9 @@
 <template>
     <v-app>
       <v-main>
-        <div id="app">
         <NavBar/>
-      </div>
+        <div id="app">
+        </div>
       <router-view/>
     </v-main>
   </v-app>
@@ -17,7 +17,7 @@ import db from "./firebase/initFirebase";
     db,
     name: 'App',
     components: {
-      NavBar
+      NavBar,
     },
   };
   onAuthStateChanged(getAuth(), user => {
@@ -56,3 +56,6 @@ import db from "./firebase/initFirebase";
   font-size: 16px;
 }
 </style>
+
+
+
