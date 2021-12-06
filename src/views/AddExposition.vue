@@ -15,6 +15,10 @@
       <label for="description">Descripción/Texto curatorial: </label>
       <input v-model="description" type="text" id="description" placeholder="Ingrese una descripción" class="input"/>
       <br>
+      <br>
+      <label for="description">Imagen representativa: </label>
+      <input v-model="image" type="text" id="image" placeholder="Ingrese un link de alguna imagen representativa" class="input"/>
+      <br>
       <label for="initdate">Fecha de inicio: </label>
       <input v-model="initdate" type="date" id="initdate" placeholder="Fecha de inicio" class="input"/>
       <br>
@@ -64,6 +68,7 @@ export default {
       id: null,
       title: "",
       description: "",
+      image: "",
       initdate: "",
       enddate: "",
       link: "",
@@ -86,6 +91,7 @@ export default {
       const exhibition = {
         name: this.title,
         description: this.description,
+        image: this.image,
         initdate: this.initdate,
         enddate: this.enddate,
         link: this.link,
