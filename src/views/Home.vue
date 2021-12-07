@@ -7,31 +7,48 @@
     <div id="searchBar">
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
-    <div class="grid-container">
-      <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
-        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
-          <div class="grid-item">
-            <div class="expoContainer">
-              <div class="expoItem">
-                <img :src='exposition.image'/>
+    <div class="home-container">
+        <div class="expo-container">
+          <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
+            <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
+              <div class="grid-expo-item">
+                <div class="expoContainer">
+                  <div class="expoItem">
+                    <img :src='exposition.image'/>
+                  </div>
+                  <div class="expoItem">
+                    <h2>{{exposition.name}}</h2>
+                    <p>{{exposition.description}}</p>
+                    <div class="addButton">
+                      <v-btn>
+                        <span>Añadir a mi agenda</span>
+                      </v-btn>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="expoItem">
-                <h2>{{exposition.name}}</h2>
-                <p>{{exposition.description}}</p>
-              </div>
-            </div>
+            </router-link>
           </div>
-        </router-link>
       </div>
-    </div>
-    <div>
+      <div class="home-item">
+        <div class="orderBy">
+          <p>Ordenar por:</p>
+          <v-radio-group v-model="order">
+            <v-radio v-for="option in orderOptions" :key="option" :label="option.text" color="yellow"/>
+          </v-radio-group>
+        </div>
+        <div style="margin-top: 50px">
+          <input v-model="subscribe" type="text" placeholder="Suscribite al newsletter"/>
+          <v-btn dark style="margin-top: 10px" @click="subscribe()">Suscribite</v-btn>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import db from "../firebase/initFirebase";
-import {onSnapshot, collection} from "firebase/firestore"
+import {onSnapshot, collection, query, orderBy} from "firebase/firestore"
 
 export default {
   name: 'Home',
@@ -39,6 +56,12 @@ export default {
     return {
       expositions: [],
       search: "",
+      order: "",
+      orderOptions: [
+        {value: 'alpha', text: 'Orden alfabético'},
+        {value: 'date', text: 'Fecha de cierre'},
+      ],
+      subscribe: "",
     }
   },
   computed: {
@@ -58,9 +81,32 @@ export default {
         })
       });
     },
+    async getMuestrasAlpha() {
+      const citiesCol = collection(db, "muestras");
+      const q = query(citiesCol, orderBy("name"));
+      await onSnapshot(q, (querySnapshot) => {
+        this.expositions = [];
+        querySnapshot.forEach((doc) => {
+          this.expositions.push(doc.data())
+        })
+      });
+    },
+    async getMuestrasDate() {
+      const citiesCol = collection(db, "muestras");
+      const q = query(citiesCol, orderBy("date"));
+      await onSnapshot(q, (querySnapshot) => {
+        this.expositions = [];
+        querySnapshot.forEach((doc) => {
+          this.expositions.push(doc.data())
+        })
+      });
+    },
   },
   beforeMount() {
     this.getMuestras();
+  },
+  subscribe(){
+
   }
 };
 </script>
@@ -91,7 +137,7 @@ export default {
 #searchBar{
   position: center;
   width: 40%;
-  margin-left: 450px;
+  margin-left: 30%;
 }
 
 img {
@@ -106,15 +152,27 @@ input[type="text"]{
   background-color: white;
 }
 
-.grid-container {
+.home-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.home-item {
+  font-size: 17px;
+  margin-left: 10%;
+  margin-top: 25px;
+  margin-right: 5%;
+}
+
+.expo-container {
   display: grid;
-  margin-top: 5vh;
   width: 60%;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-row-gap: 30px;
-  margin-left: 100px;
+  margin-left: 5%;
+  margin-top: 25px;
 }
-.grid-item {
+.grid-expo-item {
   background-color: lightgrey;
   padding: 20px;
   font-size: 17px;
@@ -128,18 +186,26 @@ input[type="text"]{
   overflow: hidden;
   text-align: left;
   justify-content: left;
+  grid-gap: 10px;
+}
+
+.addButton {
+  padding: 5px;
+  text-align: right;
+  float: left;
 }
 
 .expoContainer {
   display: inline-grid;
-  grid-template-columns: 300px 1fr
+  grid-template-columns: 300px 2fr;
 }
 
-.btn{
-  margin-top: 54px;
-  margin-left: 15px;
-  text-underline: transparent;
-  border: 0.5px solid black;
+.orderBy {
+  background-color: lightgrey;
+  padding: 20px;
+  font-size: 17px;
+  text-align: left;
+  justify-content: left;
 }
 
 
