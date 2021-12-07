@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import store from "../store";
 import GoogleMap from "../components/GoogleMaps";
 
 export default {
@@ -16,6 +17,14 @@ export default {
   components: {
     GoogleMap
   },
+  data(){
+    return {
+      expositions: store.myexpositions,
+      search: "",
+    }
+  },
+  computed: {
+  }
 }
 </script>
 

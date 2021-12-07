@@ -28,7 +28,6 @@
   <v-btn
       :to="{name: 'AddExposition'}"
       text
-      v-show="$isArtist"
       class="btn">
     <span class="font">Registrá tu muestra</span>
   </v-btn>
@@ -50,7 +49,6 @@
 
 <div class="d-flex align-center">
   <v-btn
-      v-show="!$isLoggedIn"
       :to="{name: 'Login'}"
       text
       class="btn">
@@ -58,15 +56,6 @@
     <span class="font">Iniciar Sesión</span>
   </v-btn>
   <v-btn
-      v-show="!$isLoggedIn"
-      :to="{name: 'Register'}"
-      text
-      class="btn">
-    <v-icon style="color: white; font-size:35px;">mdi-account-outline</v-icon>
-    <span class="font">Registrate</span>
-  </v-btn>
-  <v-btn
-      v-show="$isLoggedIn"
       text
       class="btn"
       @click="logout">
@@ -77,23 +66,19 @@
 </template>
 
 <script>
+
 import {signOut, getAuth} from "firebase/auth";
-import {mapGetters} from "vuex";
 export default {
   name: "NavBar.vue",
-  computed: mapGetters("user", {
-    $isLoggedIn: "isLoggedIn",
-    $isArtist: "isArtist"
-  }),
   methods: {
     async logout() {
       const auth = getAuth();
       await signOut(auth);
       if (this.$route.path !== "/") {
-        await this.$router.push({name: 'Home'});
+        this.$router.push({name: 'Home'});
       }
     }
-  },
+  }
 }
 </script>
 

@@ -7,51 +7,30 @@
     <div id="searchBar">
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
-    <div class="home-container">
-        <div class="expo-container">
-          <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
-            <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params: { exposition: exposition, slug: exposition.id },}">
-              <div class="grid-expo-item">
-                <div class="expoContainer">
-                  <div class="expoItem">
-                    <img :src='exposition.image'/>
-                  </div>
-                  <div class="expoItem">
-                    <h2>{{exposition.name}}</h2>
-                    <p>{{exposition.description}}</p>
-                    <div class="addButton">
-                      <v-btn @click="addToAgenda(exposition.id)">
-                        <span>Añadir a mi agenda</span>
-                      </v-btn>
-                    </div>
-                  </div>
-                </div>
+    <div class="grid-container" id="grid">
+      <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
+        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
+          <div class="grid-item">
+            <div class="expoContainer">
+              <div class="expoItem">
+                <img :src='exposition.image'/>
               </div>
-            </router-link>
+              <div class="expoItem">
+                <h2>{{exposition.name}}</h2>
+                <p>{{exposition.description}}</p>
+              </div>
+            </div>
           </div>
+        </router-link>
       </div>
     </div>
     <div class="loading" v-show="loading">Cargando Muestras...</div>
-      <div class="home-item">
-        <div class="orderBy">
-          <p>Ordenar por:</p>
-          <v-radio-group v-model="order">
-            <v-radio v-for="option in orderOptions" :key="option.value" :label="option.text" color="yellow"/>
-          </v-radio-group>
-        </div>
-        <div style="margin-top: 50px">
-          <input v-model="subscribe" type="text" placeholder="Suscribite al newsletter"/>
-          <v-btn dark style="margin-top: 10px" @click="subscribe()">Suscribite</v-btn>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import db from "../firebase/initFirebase";
 import {collection, query, limit, getDocs, startAfter, orderBy} from "firebase/firestore";
-import {mapGetters} from "vuex";
 
 export default {
   created () {
@@ -70,12 +49,6 @@ export default {
       search: "",
       latest: null,
       loading: false
-      order: "",
-      orderOptions: [
-        {value: 'alpha', text: 'Orden alfabético'},
-        {value: 'date', text: 'Fecha de cierre'},
-      ],
-      subscribe: "",
     }
   },
   computed: {
@@ -83,15 +56,22 @@ export default {
       return this.expositions.filter((exposition) => {
           return exposition.name.match(this.search) || exposition.description.match(this.search);
       })
-    },
-    ...mapGetters("user" ,{
-      $getUserId: "getId",
-    }),
+    }
   },
   methods: {
     async getMuestras() {
       this.loading = true;
       const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
+
+      // CONFIRMADO QUE CON ONSNAPSHOT NO ANDA POR ALGUNA RAZÓN
+
+      // const datos = await onSnapshot(q, (querySnapshot) => {
+      //   this.expositions = [];
+      //   querySnapshot.forEach((doc) => {
+      //     this.expositions.push(doc.data());
+      //   });
+      // });
+
       const datos = await getDocs(q);
       await datos.docs.forEach((doc) => {
         const data = doc.data();
@@ -111,44 +91,7 @@ export default {
       }
     }
   },
-    async getMuestrasAlpha() {
-      const citiesCol = collection(db, "muestras");
-      const q = query(citiesCol, orderBy("name"));
-      await onSnapshot(q, (querySnapshot) => {
-        this.expositions = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data.id = doc.id;
-          this.expositions.push(data);
-        })
-      });
-    },
-    async getMuestrasDate() {
-      const citiesCol = collection(db, "muestras");
-      const q = query(citiesCol, orderBy("date"));
-      await onSnapshot(q, (querySnapshot) => {
-        this.expositions = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data.id = doc.id;
-          this.expositions.push(data);
-        })
-      });
-    },
-    async addToAgenda(id) {
-      const user = doc(db,"users", this.$getUserId);
-      await updateDoc(user, {
-        agenda: arrayUnion(doc(db,"muestras",id)),
-      })
-    },
-  },
-  beforeMount() {
-    this.getMuestras();
-  },
-  subscribe(){
-
-  }
-};
+}
 </script>
 
 <style scoped>
@@ -177,7 +120,7 @@ export default {
 #searchBar{
   position: center;
   width: 40%;
-  margin-left: 30%;
+  margin-left: 450px;
 }
 
 img {
@@ -192,20 +135,9 @@ input[type="text"]{
   background-color: white;
 }
 
-.home-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.home-item {
-  font-size: 17px;
-  margin-left: 10%;
-  margin-top: 25px;
-  margin-right: 5%;
-}
-
-.expo-container {
+.grid-container {
   display: grid;
+  margin-top: 5vh;
   width: 60%;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-row-gap: 30px;
@@ -218,7 +150,7 @@ input[type="text"]{
 .grid-container::-webkit-scrollbar {
   display: none;
 }
-.grid-expo-item {
+.grid-item {
   background-color: lightgrey;
   padding: 20px;
   font-size: 17px;
@@ -232,26 +164,18 @@ input[type="text"]{
   overflow: hidden;
   text-align: left;
   justify-content: left;
-  grid-gap: 10px;
-}
-
-.addButton {
-  padding: 5px;
-  text-align: right;
-  float: left;
 }
 
 .expoContainer {
   display: inline-grid;
-  grid-template-columns: 300px 2fr;
+  grid-template-columns: 300px 1fr
 }
 
-.orderBy {
-  background-color: lightgrey;
-  padding: 20px;
-  font-size: 17px;
-  text-align: left;
-  justify-content: left;
+.btn{
+  margin-top: 54px;
+  margin-left: 15px;
+  text-underline: transparent;
+  border: 0.5px solid black;
 }
 
 .loading {

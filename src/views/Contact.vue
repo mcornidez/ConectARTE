@@ -5,63 +5,22 @@
       <b>Contactanos</b>
     </div>
     <div class="form">
-      <form ref="form" @submit.prevent="sendEmail">
       <br>
-      <input required v-model="name" type="text" name="name" id="name" placeholder="Nombre" class="input"/>
+      <input required v-model="name" type="text" id="name" placeholder="Nombre" class="input"/>
       <br>
-      <input required v-model="email" type="email" name="email" placeholder="Email" class="input"/>
+      <input required v-model="email" type="email" placeholder="Email" class="input"/>
       <br>
-      <textarea required v-model="message" name="message" type="text" placeholder="Mensaje" class="input"/>
+      <input required v-model="message" type="text" placeholder="Mensaje" class="input"/>
       <br>
-      <button type="submit" class="btn">Enviar mensaje</button>
-      </form>
+      <button @click="sendForm" class="btn">Enviar mensaje</button>
     </div>
   </div>
 </template>
 
 <script>
 
-import {mapGetters} from "vuex";
-import emailjs from 'emailjs-com';
-
 export default {
   name: "Help",
-  data() {
-    return {
-      name: "",
-      email: "",
-      message: "",
-    };
-  },
-  computed: mapGetters("user", {
-    $isLoggedIn: "isLoggedIn",
-    $getName: "getName",
-    $getEmail: "getEmail",
-  }),
-  methods: {
-    sendEmail() {
-      try {
-        emailjs.sendForm('service_ll2bmts', "template_d36cisw", this.$refs.form,"user_9bC4eutcbYqMFyQbsId7D")
-      } catch(error) {
-        console.log({error});
-      }
-      this.$router.push("/");
-    },
-    loadUser() {
-      if (this.$isLoggedIn) {
-        this.name = this.$getName;
-        this.email = this.$getEmail;
-      }
-    },
-  },
-  watch: {
-    $isLoggedIn() {
-      this.loadUser();
-    }
-  },
-  beforeMount() {
-    this.loadUser();
-  }
 };
 </script>
 

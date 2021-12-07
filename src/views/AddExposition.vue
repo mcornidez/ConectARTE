@@ -102,14 +102,15 @@ export default {
     }
   },
   methods: {
-    async registerExpo() {
-      // if (this.validate(file) === "") {
-      let docRef;
-      if (this.id === null)
-        docRef = doc(collection(db, "muestras"));
-      else
-        docRef = doc(db, "muestras", this.id);
-      const exhibition = {
+    async registerExpo(file) {
+      if (this.validate(file) === "") {
+        let docRef;
+        if (this.id === null)
+          docRef = doc(collection(db, "muestras"));
+        else
+          docRef = doc(db, "muestras", this.id);
+        alert(docRef);
+        const exhibition = {
           name: this.title,
           description: this.description,
           image: this.image,
@@ -123,7 +124,8 @@ export default {
           inittime: this.inittime,
           endtime: this.endtime
         }
-      await setDoc(docRef, exhibition);
+        await setDoc(docRef, exhibition);
+      }
     },
     OnFileSelected(){
       const files = this.$refs.files.files;
