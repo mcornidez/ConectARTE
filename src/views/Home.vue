@@ -7,7 +7,7 @@
     <div id="searchBar">
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
-    <div class="grid-container">
+    <div class="grid-container" id="grid">
       <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
         <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
           <div class="grid-item">
@@ -24,9 +24,7 @@
         </router-link>
       </div>
     </div>
-    <div>
-      <button @click="testPagination" class="btn">Prueba</button>
-    </div>
+    <div class="loading" v-show="loading">Cargando Muestras...</div>
   </div>
 </template>
 
@@ -35,12 +33,22 @@ import db from "../firebase/initFirebase";
 import {collection, query, limit, getDocs, startAfter, orderBy} from "firebase/firestore";
 
 export default {
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  async beforeMount() {
+    await this.getMuestras();
+  },
   name: 'Home',
   data(){
     return {
       expositions: [],
       search: "",
-      latest: null
+      latest: null,
+      loading: false
     }
   },
   computed: {
@@ -52,7 +60,7 @@ export default {
   },
   methods: {
     async getMuestras() {
-      console.log(this.latest)
+      this.loading = true;
       const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
 
       // CONFIRMADO QUE CON ONSNAPSHOT NO ANDA POR ALGUNA RAZÓN
@@ -66,19 +74,24 @@ export default {
 
       const datos = await getDocs(q);
       await datos.docs.forEach((doc) => {
-        this.expositions.push(doc.data());
+        const data = doc.data();
+        data.id = doc.id;
+        this.expositions.push(data);
       })
       this.latest = datos.docs[datos.docs.length - 1];
-      console.log(this.latest)
-    },
-    async testPagination() {
-      await this.getMuestras();
+      if (datos.empty)
+        window.removeEventListener('scroll', this.handleScroll);
+      this.loading = false;
+      },
+    async handleScroll() {
+      console.log("prueba");
+      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
+      if (bottomOfWindow) {
+        await this.getMuestras();
+      }
     }
   },
-  async beforeMount() {
-    await this.getMuestras();
-  }
-};
+}
 </script>
 
 <style scoped>
@@ -129,6 +142,13 @@ input[type="text"]{
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-row-gap: 30px;
   margin-left: 100px;
+  /*Scrolling*/
+  max-height: 80%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.grid-container::-webkit-scrollbar {
+  display: none;
 }
 .grid-item {
   background-color: lightgrey;
@@ -158,5 +178,7 @@ input[type="text"]{
   border: 0.5px solid black;
 }
 
-
+.loading {
+  font-size: 2em;
+}
 </style>
