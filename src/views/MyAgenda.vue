@@ -8,10 +8,10 @@
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
     <div class="grid-container">
-      <div v-for="exposition in expositions" :key="exposition.name" class="single-exposition">
-        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
+      <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
+        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params: { exposition: exposition, slug: exposition.id }}">
           <div class="grid-item">
-            <img :src='exposition.image'/>
+            <img :src='exposition.image' alt="image"/>
             <h2>{{exposition.name}}</h2>
             <p>{{exposition.description}}</p>
           </div>
@@ -24,23 +24,52 @@
 </template>
 
 <script>
-import store from "@/store";
+
+import {doc, getDoc} from "firebase/firestore";
+import db from "@/firebase/initFirebase";
+import {mapGetters} from "vuex";
 
 export default {
   name: "MyAgenda",
   data(){
     return {
-      expositions: store.myexpositions,
+      expositions: [],
       search: "",
     }
   },
   computed: {
     filteredExpositions: function(){
       return this.expositions.filter((exposition) => {
-        return exposition.name.match(this.search) || exposition.venue.match(this.search) || exposition.artist.match(this.search);
+        return exposition.name.match(this.search) || exposition.description.match(this.search);
       })
-    }
-  }
+    },
+    ...mapGetters("user" ,{
+      $getUserId: "getId",
+    }),
+  },
+  watch: {
+    $getUserId() {
+      this.getExpositions();
+    },
+  },
+  methods: {
+    async getExpositions() {
+      if (this.$getUserId) {
+        const user = await getDoc(doc(db, "users", this.$getUserId));
+        this.expositions = [];
+        const agenda = user.data().agenda;
+        for (let i = 0; i < agenda.length; i++) {
+          const doc = await getDoc(agenda[i]);
+          const data = doc.data();
+          data.id = doc.id;
+          this.expositions.push(data);
+        }
+      }
+    },
+  },
+  beforeMount() {
+    this.getExpositions();
+  },
 }
 </script>
 

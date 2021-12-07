@@ -24,6 +24,7 @@ const routes = [
   {
     path: '/exposiciones/:slug',
     name: 'Exposition',
+    props: true,
     component: () => import(/* webpackChunkName: "exposition" */ '../views/Exposition.vue'),
   },
   {
