@@ -16,22 +16,30 @@
 </template>
 
 <script>
-import store from "@/store"
+import {getDoc, doc} from "firebase/firestore";
+import db from "../firebase/initFirebase"
 
 export default {
   name: "Exposition",
-  data(){
-    return {
-      expositionSlug: this.$route.params.slug
+  props: {
+    exposition: Object,
+    slug: String,
+  },
+  methods: {
+    async getExposition() {
+      if (this.slug) {
+        const exposition = await getDoc(doc(db, "muestras", this.slug));
+        const data = exposition.data();
+        data.id = exposition.id;
+        this.exposition = data;
+      }
     }
   },
-  computed: {
-    exposition(){
-      return store.expositions.find(
-          exposition => exposition.slug === this.expositionSlug
-      )
+  beforeMount() {
+    if (!this.exposition) {
+      this.getExposition();
     }
-  }
+  },
 }
 </script>
 

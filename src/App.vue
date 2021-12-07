@@ -10,23 +10,21 @@
 </template>
 
 <script>
-import {onAuthStateChanged, getAuth} from "firebase/auth";
 import db from "./firebase/initFirebase";
-  import NavBar from './components/NavBar';
-  export default {
-    db,
-    name: 'App',
-    components: {
-      NavBar,
-    },
-  };
-  onAuthStateChanged(getAuth(), user => {
-    if (user) {
-      localStorage.setItem("USER", user.email);
-    } else {
-      localStorage.removeItem("USER");
-    }
-  })
+import NavBar from './components/NavBar';
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+export default {
+  db,
+  name: 'App',
+  components: {
+    NavBar,
+  },
+  beforeCreate() {
+    onAuthStateChanged(getAuth(), user => {
+      this.$store.dispatch("user/update", {user: user});
+    });
+  },
+};
 </script>
 
 <style lang="scss">

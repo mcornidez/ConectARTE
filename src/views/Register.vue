@@ -20,6 +20,8 @@
       <label for="user">Ingrese un usuario: </label>
       <input required v-model="user" type="text" id="user" class="input" placeholder="Ingrese un usuario"/>
       <br>
+      <v-switch label="Artista" v-model="artist"></v-switch>
+      <br>
       <button @click="register" class="btn">Registrarse</button>
       <br>
       <br>
@@ -30,7 +32,10 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword  } from "firebase/auth";
+import db from "../firebase/initFirebase"
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {doc, setDoc} from "firebase/firestore";
+import {mapActions} from "vuex";
 export default {
   name: "Register",
   data(){
@@ -39,15 +44,29 @@ export default {
       surname: null,
       mail: null,
       password: null,
-      user: null
+      user: null,
+      artist: false,
     }
   },
   methods: {
-    async register(){
-      //authenticate
+    ...mapActions("user" ,{
+      $update: "update",
+    }),
+    async register() {
       const auth = getAuth();
-      await createUserWithEmailAndPassword(auth, this.mail, this.password);
-      this.$router.push({name: 'Home'});
+      const credentials = await createUserWithEmailAndPassword(auth, this.mail, this.password);
+      await setDoc(doc(db, "users", credentials.user.uid), {
+        name: this.name,
+        surname: this.surname,
+        artist: this.artist,
+        username: this.user,
+        agenda: [],
+      });
+      updateProfile(credentials.user, {
+        displayName: this.user,
+      });
+      this.$update({user: credentials.user})
+      await this.$router.push({name: 'Home'});
     }
   }
 }
