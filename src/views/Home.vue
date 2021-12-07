@@ -43,20 +43,33 @@
         </div>
       </div>
     </div>
+  <div class="loading" v-show="loading">Cargando Muestras...</div>
   </div>
 </template>
 
 <script>
 import db from "../firebase/initFirebase";
-import {onSnapshot, collection, query, orderBy, doc, updateDoc, arrayUnion} from "firebase/firestore"
+import {collection, query, limit, getDocs, startAfter, orderBy, onSnapshot, arrayUnion, doc, updateDoc} from "firebase/firestore";
 import {mapGetters} from "vuex";
 
+
 export default {
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  async beforeMount() {
+    await this.getMuestras();
+  },
   name: 'Home',
   data(){
     return {
       expositions: [],
       search: "",
+      latest: null,
+      loading: false,
       order: "",
       orderOptions: [
         {value: 'alpha', text: 'Orden alfabético'},
@@ -77,16 +90,27 @@ export default {
   },
   methods: {
     async getMuestras() {
-      const citiesCol = collection(db, "muestras");
-      await onSnapshot(citiesCol, (querySnapshot) => {
-        this.expositions = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data.id = doc.id;
-          this.expositions.push(data);
-        })
-      });
-    },
+      this.loading = true;
+      const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
+      const datos = await getDocs(q);
+      await datos.docs.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        this.expositions.push(data);
+      })
+      this.latest = datos.docs[datos.docs.length - 1];
+      if (datos.empty)
+        window.removeEventListener('scroll', this.handleScroll);
+      this.loading = false;
+      },
+    async handleScroll() {
+      console.log("prueba");
+      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
+      if (bottomOfWindow) {
+        await this.getMuestras();
+      }
+    }
+  },
     async getMuestrasAlpha() {
       const citiesCol = collection(db, "muestras");
       const q = query(citiesCol, orderBy("name"));
@@ -117,9 +141,6 @@ export default {
         agenda: arrayUnion(doc(db,"muestras",id)),
       })
     },
-  },
-  beforeMount() {
-    this.getMuestras();
   },
   subscribe(){
 
@@ -185,8 +206,15 @@ input[type="text"]{
   width: 60%;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-row-gap: 30px;
+  /*Scrolling*/
+  max-height: 80%;
+  box-sizing: border-box;
+  overflow: auto;
   margin-left: 5%;
   margin-top: 25px;
+}
+.expo-container::-webkit-scrollbar {
+  display: none;
 }
 .grid-expo-item {
   background-color: lightgrey;
@@ -224,5 +252,7 @@ input[type="text"]{
   justify-content: left;
 }
 
-
+.loading {
+  font-size: 2em;
+}
 </style>
