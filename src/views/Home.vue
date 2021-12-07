@@ -25,13 +25,14 @@
       </div>
     </div>
     <div>
+      <button @click="testPagination" class="btn">Prueba</button>
     </div>
   </div>
 </template>
 
 <script>
 import db from "../firebase/initFirebase";
-import {collection, getDocs} from "firebase/firestore/lite";
+import {collection, query, limit, getDocs, startAfter, orderBy} from "firebase/firestore";
 
 export default {
   name: 'Home',
@@ -39,6 +40,7 @@ export default {
     return {
       expositions: [],
       search: "",
+      latest: null
     }
   },
   computed: {
@@ -50,13 +52,31 @@ export default {
   },
   methods: {
     async getMuestras() {
-      const citiesCol = collection(db, "muestras");
-      const citySnapshot = await getDocs(citiesCol);
-      return citySnapshot.docs.map(doc => doc.data());
+      console.log(this.latest)
+      const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
+
+      // CONFIRMADO QUE CON ONSNAPSHOT NO ANDA POR ALGUNA RAZÓN
+
+      // const datos = await onSnapshot(q, (querySnapshot) => {
+      //   this.expositions = [];
+      //   querySnapshot.forEach((doc) => {
+      //     this.expositions.push(doc.data());
+      //   });
+      // });
+
+      const datos = await getDocs(q);
+      await datos.docs.forEach((doc) => {
+        this.expositions.push(doc.data());
+      })
+      this.latest = datos.docs[datos.docs.length - 1];
+      console.log(this.latest)
     },
+    async testPagination() {
+      await this.getMuestras();
+    }
   },
   async beforeMount() {
-    this.expositions = await this.getMuestras();
+    await this.getMuestras();
   }
 };
 </script>
