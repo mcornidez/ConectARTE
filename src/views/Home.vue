@@ -109,8 +109,7 @@ export default {
       if (bottomOfWindow) {
         await this.getMuestras();
       }
-    }
-  },
+    },
     async getMuestrasAlpha() {
       const citiesCol = collection(db, "muestras");
       const q = query(citiesCol, orderBy("name"));
@@ -141,9 +140,6 @@ export default {
         agenda: arrayUnion(doc(db,"muestras",id)),
       })
     },
-  },
-  subscribe(){
-
   }
 };
 </script>
