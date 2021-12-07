@@ -8,8 +8,8 @@
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
     <div class="grid-container">
-      <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
-        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
+      <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
+        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params: { exposition: exposition, slug: exposition.id }}">
           <div class="grid-item">
             <img :src='exposition.image' alt="image"/>
             <h2>{{exposition.name}}</h2>
@@ -60,7 +60,9 @@ export default {
         const agenda = user.data().agenda;
         for (let i = 0; i < agenda.length; i++) {
           const doc = await getDoc(agenda[i]);
-          this.expositions.push(doc.data());
+          const data = doc.data();
+          data.id = doc.id;
+          this.expositions.push(data);
         }
       }
     },

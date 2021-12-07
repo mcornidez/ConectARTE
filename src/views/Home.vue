@@ -10,7 +10,7 @@
     <div class="home-container">
         <div class="expo-container">
           <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
-            <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
+            <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params: { exposition: exposition, slug: exposition.id },}">
               <div class="grid-expo-item">
                 <div class="expoContainer">
                   <div class="expoItem">
