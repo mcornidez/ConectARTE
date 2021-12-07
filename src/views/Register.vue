@@ -60,6 +60,7 @@ export default {
         surname: this.surname,
         artist: this.artist,
         username: this.user,
+        agenda: [],
       });
       updateProfile(credentials.user, {
         displayName: this.user,

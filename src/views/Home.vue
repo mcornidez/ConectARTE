@@ -9,7 +9,7 @@
     </div>
     <div class="home-container">
         <div class="expo-container">
-          <div v-for="exposition in filteredExpositions" :key="exposition.name" class="single-exposition">
+          <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
             <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params:{slug:exposition.slug}}">
               <div class="grid-expo-item">
                 <div class="expoContainer">
@@ -20,7 +20,7 @@
                     <h2>{{exposition.name}}</h2>
                     <p>{{exposition.description}}</p>
                     <div class="addButton">
-                      <v-btn>
+                      <v-btn @click="addToAgenda(exposition.id)">
                         <span>Añadir a mi agenda</span>
                       </v-btn>
                     </div>
@@ -34,7 +34,7 @@
         <div class="orderBy">
           <p>Ordenar por:</p>
           <v-radio-group v-model="order">
-            <v-radio v-for="option in orderOptions" :key="option" :label="option.text" color="yellow"/>
+            <v-radio v-for="option in orderOptions" :key="option.value" :label="option.text" color="yellow"/>
           </v-radio-group>
         </div>
         <div style="margin-top: 50px">
@@ -48,7 +48,8 @@
 
 <script>
 import db from "../firebase/initFirebase";
-import {onSnapshot, collection, query, orderBy} from "firebase/firestore"
+import {onSnapshot, collection, query, orderBy, doc, updateDoc, arrayUnion} from "firebase/firestore"
+import {mapGetters} from "vuex";
 
 export default {
   name: 'Home',
@@ -69,7 +70,10 @@ export default {
       return this.expositions.filter((exposition) => {
           return exposition.name.match(this.search) || exposition.description.match(this.search);
       })
-    }
+    },
+    ...mapGetters("user" ,{
+      $getUserId: "getId",
+    }),
   },
   methods: {
     async getMuestras() {
@@ -77,7 +81,9 @@ export default {
       await onSnapshot(citiesCol, (querySnapshot) => {
         this.expositions = [];
         querySnapshot.forEach((doc) => {
-          this.expositions.push(doc.data())
+          const data = doc.data();
+          data.id = doc.id;
+          this.expositions.push(data);
         })
       });
     },
@@ -87,7 +93,9 @@ export default {
       await onSnapshot(q, (querySnapshot) => {
         this.expositions = [];
         querySnapshot.forEach((doc) => {
-          this.expositions.push(doc.data())
+          const data = doc.data();
+          data.id = doc.id;
+          this.expositions.push(data);
         })
       });
     },
@@ -97,9 +105,17 @@ export default {
       await onSnapshot(q, (querySnapshot) => {
         this.expositions = [];
         querySnapshot.forEach((doc) => {
-          this.expositions.push(doc.data())
+          const data = doc.data();
+          data.id = doc.id;
+          this.expositions.push(data);
         })
       });
+    },
+    async addToAgenda(id) {
+      const user = doc(db,"users", this.$getUserId);
+      await updateDoc(user, {
+        agenda: arrayUnion(doc(db,"muestras",id)),
+      })
     },
   },
   beforeMount() {

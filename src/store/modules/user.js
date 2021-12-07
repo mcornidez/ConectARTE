@@ -16,6 +16,9 @@ export default {
       }
       return false;
     },
+    getId(state) {
+      return state.token;
+    }
   },
   mutations: {
     setToken(state, token) {
