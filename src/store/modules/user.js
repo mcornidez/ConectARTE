@@ -5,19 +5,23 @@ export default {
   state: {
     token: null,
     info: null,
+    artist: null,
   },
   getters: {
     isLoggedIn(state) {
       return state.token != null;
     },
     isArtist(state) {
-      if (state.info) {
-        return state.info.artist;
-      }
-      return false;
+      return state.artist;
     },
     getId(state) {
       return state.token;
+    },
+    getName(state) {
+      return state.info.displayName;
+    },
+    getEmail(state) {
+      return state.info.email;
     }
   },
   mutations: {
@@ -26,26 +30,31 @@ export default {
     },
     setInfo(state, info) {
       state.info = info;
+    },
+    setArtist(state, artist) {
+      state.artist = artist;
     }
   },
   actions: {
     update({dispatch}, {user}) {
       if (user) {
-        dispatch("updateToken", { token: user.uid });
+        dispatch("updateToken", { user: user });
       } else {
         dispatch("removeToken");
       }
     },
-    async updateToken({ state, commit }, { token }) {
-      localStorage.setItem("USER", token);
-      commit("setToken", token);
-      const docs = await getDoc(doc(db, "users", state.token));
-      commit("setInfo",docs.data());
+    async updateToken({ commit }, { user }) {
+      localStorage.setItem("USER", user.uid);
+      const docs = await getDoc(doc(db, "users", user.uid));
+      commit("setInfo", user);
+      commit("setArtist", docs.data());
+      commit("setToken", user.uid);
     },
     removeToken({ commit }) {
       localStorage.removeItem("USER");
       commit("setToken", null);
       commit("setInfo", null);
+      commit("setArtist", null);
     },
   },
 };
