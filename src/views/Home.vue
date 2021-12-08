@@ -121,6 +121,8 @@ export default {
       else
         q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), limit(2));
       const datos = await getDocs(q);
+      var today = new Date();
+      var currentdate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
       await datos.docs.forEach((doc) => {
         const data = doc.data();
         data.id = doc.id;
@@ -129,7 +131,7 @@ export default {
           if (data.id === exp.id)
             no = true;
         });
-        if (!no)
+        if (!no && data.enddate >= currentdate)
           this.expositions.push(data);
       })
       this.latest = datos.docs[datos.docs.length - 1];
