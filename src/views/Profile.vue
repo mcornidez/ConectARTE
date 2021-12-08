@@ -21,9 +21,11 @@
         <br>
         <b>Email: {{this.email}}</b>
         <br>
-        <br>
-        <b>Cantidad de muestras: {{user.muestras.length}}</b>
-        <br>
+        <div v-if="$isArtist">
+          <br>
+          <b>Cantidad de muestras: {{user.muestras.length}}</b>
+          <br>
+        </div>
         <br>
         <button type="submit" class="btn">Actualizar mis datos</button>
       </form>
@@ -40,7 +42,7 @@ export default {
   data() {
     return {
       user: {
-        agenda: [],
+        muestras: [],
       },
       email:"",
       id:"",
@@ -49,6 +51,7 @@ export default {
   computed: mapGetters("user", {
     $getUserId: "getId",
     $getEmail: "getEmail",
+    $isArtist: "isArtist",
   }),
   methods: {
     async getUser() {
