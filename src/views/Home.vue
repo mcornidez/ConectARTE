@@ -117,12 +117,12 @@ export default {
       this.loading = true;
       let q;
       if (this.latest)
-        q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), startAfter(this.latest), limit(2));
+        q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), startAfter(this.latest), limit(5));
       else
-        q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), limit(2));
+        q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), limit(5));
       const datos = await getDocs(q);
-      var today = new Date();
-      var currentdate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      let today = new Date();
+      let currentdate = today.getFullYear()+'-'+('0' + (today.getMonth()+1)).slice(-2)+'-'+('0' + today.getDate()).slice(-2);
       await datos.docs.forEach((doc) => {
         const data = doc.data();
         data.id = doc.id;
@@ -131,12 +131,16 @@ export default {
           if (data.id === exp.id)
             no = true;
         });
-        if (!no && data.enddate >= currentdate)
+        if (!no && data.enddate >= currentdate) {
           this.expositions.push(data);
-      })
+        }
+      });
       this.latest = datos.docs[datos.docs.length - 1];
       if (datos.empty)
         window.removeEventListener('scroll', this.handleScroll);
+      else if (this.expositions.length < 5) {
+        await this.getMuestras();
+      }
       this.loading = false;
       },
 
