@@ -29,6 +29,7 @@
         </router-link>
       </div>
     </div>
+    <div class="loading" v-show="loading">Cargando Muestras...</div>
   </div>
 </template>
 
@@ -44,6 +45,7 @@ export default {
     return {
       expositions: [],
       search: "",
+      loading: false,
     }
   },
   computed: {
@@ -70,6 +72,7 @@ export default {
   },
   methods: {
     async getExpositions() {
+      this.loading = true;
       if (this.$getUserId) {
         const user = await getDoc(doc(db, "users", this.$getUserId));
         this.expositions = [];
@@ -81,6 +84,7 @@ export default {
           this.expositions.push(data);
         }
       }
+      this.loading = false;
     },
   },
   beforeMount() {
