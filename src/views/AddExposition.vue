@@ -2,7 +2,7 @@
   <div id="background">
     <div id="pageTitle">
       <br>
-      <b>{{this.id? "Editá tu muestra" : "Registrá tu muestra"}}</b>
+      <b>{{this.id? "Edita tu muestra" : "Registrá tu muestra"}}</b>
     </div>
     <div class="pageSubtitle">
       <b>Información de la muestra</b>
@@ -114,9 +114,6 @@
         <button v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</button>
       </form>
     </div>
-    <br>
-    <v-btn dark @click="registerExpo" class="btn">Guardar</v-btn>
-    <v-btn dark v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</v-btn>
   </div>
 </template>
 
