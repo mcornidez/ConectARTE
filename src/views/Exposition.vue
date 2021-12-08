@@ -111,11 +111,8 @@ export default {
   background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: center;
+  height: 100%;
 }
 
 #pageTitle {
