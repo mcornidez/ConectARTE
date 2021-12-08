@@ -33,7 +33,7 @@
         <div class="orderBy">
           <p>Ordenar por:</p>
           <v-radio-group v-model="order">
-            <v-radio v-for="option in orderOptions" :key="option.value" :label="option.text" color="yellow"/>
+            <v-radio v-for="option in orderOptions" :key="option.value" :label="option.text" color="yellow" @click="resetOrder"/>
           </v-radio-group>
         </div>
         <div style="margin-top: 50px">
@@ -55,7 +55,7 @@ import {mapGetters} from "vuex";
 export default {
   created () {
     window.addEventListener('scroll', this.handleScroll);
-    this.getMuestrasAlpha();
+    this.getMuestras();
   },
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll);
@@ -67,10 +67,16 @@ export default {
       search: "",
       latest: null,
       loading: false,
-      order: "",
+
+      // 0 -> NAME
+      // 1 -> DATE
+      // 2 -> LIKES
+      order: 0,
+
       orderOptions: [
         {value: 'alpha', text: 'Orden alfabético'},
         {value: 'date', text: 'Fecha de cierre'},
+        {value: 'likes', text: 'Puntaje'}
       ],
       subscribe: "",
     }
@@ -94,76 +100,56 @@ export default {
   },
   methods: {
     async getMuestras() {
+      let orderString;
+      let orderDirection;
+      if (this.order === 0) {
+        orderString = "name";
+        orderDirection = "asc";
+      }
+      else if (this.order === 1) {
+        orderString = "enddate";
+        orderDirection = "asc";
+      }
+      else {
+        orderString = "likes";
+        orderDirection = "desc";
+      }
       this.loading = true;
-      const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
+      let q;
+      if (this.latest)
+        q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), startAfter(this.latest), limit(2));
+      else
+        q = query(collection(db, "muestras"), orderBy(orderString, orderDirection), limit(2));
       const datos = await getDocs(q);
       await datos.docs.forEach((doc) => {
         const data = doc.data();
         data.id = doc.id;
         let no = false;
         this.expositions.forEach((exp) => {
-          if (data.id === exp.id) {
+          if (data.id === exp.id)
             no = true;
-          }
         });
-        if (!no) {
+        if (!no)
           this.expositions.push(data);
-        }
       })
       this.latest = datos.docs[datos.docs.length - 1];
       if (datos.empty)
         window.removeEventListener('scroll', this.handleScroll);
       this.loading = false;
       },
+
+    resetOrder() {
+      this.expositions = [];
+      this.latest = null;
+      window.removeEventListener('scroll', this.handleScroll);
+      window.addEventListener('scroll', this.handleScroll);
+      this.getMuestras();
+    },
     async handleScroll() {
       let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
       if (bottomOfWindow) {
         await this.getMuestras();
       }
-    },
-    async getMuestrasAlpha() {
-      this.loading = true;
-      const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
-      const datos = await getDocs(q);
-      await datos.docs.forEach((doc) => {
-        const data = doc.data();
-        data.id = doc.id;
-        let no = false;
-        this.expositions.forEach((exp) => {
-          if (data.id === exp.id) {
-            no = true;
-          }
-        });
-        if (!no) {
-          this.expositions.push(data);
-        }
-      })
-      this.latest = datos.docs[datos.docs.length - 1];
-      if (datos.empty)
-        window.removeEventListener('scroll', this.handleScroll);
-      this.loading = false;
-    },
-    async getMuestrasDate() {
-      this.loading = true;
-      const q = query(collection(db, "muestras"), limit(5), orderBy("enddate"), startAfter(this.latest || 0));
-      const datos = await getDocs(q);
-      await datos.docs.forEach((doc) => {
-        const data = doc.data();
-        data.id = doc.id;
-        let no = false;
-        this.expositions.forEach((exp) => {
-          if (data.id === exp.id) {
-            no = true;
-          }
-        });
-        if (!no) {
-          this.expositions.push(data);
-        }
-      })
-      this.latest = datos.docs[datos.docs.length - 1];
-      if (datos.empty)
-        window.removeEventListener('scroll', this.handleScroll);
-      this.loading = false;
     },
     async addToAgenda(id) {
       const user = doc(db,"users", this.$getUserId);
@@ -172,7 +158,7 @@ export default {
       })
     },
   }
-};
+}
 </script>
 
 <style scoped>
@@ -186,7 +172,6 @@ export default {
   margin-top: 15vh;
   height:100%;
   padding: 0;
-  height: 100%;
 }
 
 #pageTitle{
