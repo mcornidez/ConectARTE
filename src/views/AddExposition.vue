@@ -110,8 +110,8 @@
         <input v-model="exhibition.endtime" type="time" id="endtime" placeholder="Ingrese la hora de cierre" class="input" required/>
       </div>
         <br>
-        <button type="submit" class="btn">Registrar muestra</button>
-        <button v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</button>
+        <v-btn dark type="submit" class="btn">Registrar muestra</v-btn>
+        <v-btn dark v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</v-btn>
       </form>
     </div>
   </div>
