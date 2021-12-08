@@ -4,6 +4,10 @@
       <br/>
       <b>{{ exposition.name }}</b>
     </div>
+    <div style="text-align: left; max-width: 90vw; margin-left: auto; margin-right: auto;">
+      <v-icon>mdi-thumb-up</v-icon>
+      <span> {{exposition.likes}} me gusta</span>
+    </div>
     <div class="expo-container">
       <div class="expo-item">
         <div class="expo-img">
