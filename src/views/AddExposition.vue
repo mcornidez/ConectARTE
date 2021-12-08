@@ -106,6 +106,7 @@ export default {
       else {
         docRef = doc(collection(db, "muestras"));
         this.exhibition.user = userid;
+        this.exhibition.likes = 0;
       }
       if (this.exhibition.user !== userid) {
         console.log("Esta rutina no es tuya no se como llegaste aca");
