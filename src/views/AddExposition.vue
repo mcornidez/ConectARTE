@@ -72,12 +72,13 @@
     </div>
     <br>
     <button @click="registerExpo" class="btn">Registrar muestra</button>
+    <button v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</button>
   </div>
 </template>
 
 <script>
 import db from "../firebase/initFirebase";
-import { arrayUnion, updateDoc,setDoc,getDoc, doc, collection} from "firebase/firestore";
+import { deleteDoc, arrayRemove, arrayUnion, updateDoc,setDoc,getDoc, doc, collection} from "firebase/firestore";
 
 import _ from 'lodash';
 import {mapGetters} from "vuex";
@@ -116,6 +117,22 @@ export default {
         await updateDoc(user, {
           muestras: arrayUnion(docRef),
         })
+      }
+      await this.$router.push({name: "Home"});
+    },
+    async deleteExpo() {
+      if (this.id) {
+        const userid = this.$getUserId;
+        if (this.exhibition.user !== userid) {
+          console.log("Esta rutina no es tuya no se como llegaste aca");
+        } else {
+          const docRef = doc(db, "muestras", this.id);
+          await deleteDoc(docRef);
+          const user = doc(db,"users", userid);
+          await updateDoc(user, {
+            muestras: arrayRemove(docRef),
+          })
+        }
       }
       await this.$router.push({name: "Home"});
     },
@@ -192,6 +209,10 @@ export default {
   margin-top: 15vh;
   padding: 0;
   height:100%;
+}
+
+.btn {
+  margin: 2vh;
 }
 
 </style>
