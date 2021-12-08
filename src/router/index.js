@@ -57,7 +57,7 @@ const routes = [
   },
   {
     path: '/miperfil',
-    name: 'MyProfile',
+    name: 'Profile',
     component: () => import(/* webpackChunkName: "details" */ '../views/Profile.vue'),
     meta: { requiresAuth: true }
   },
