@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {getDoc, doc} from "firebase/firestore";
+import {getDoc, doc, updateDoc, increment} from "firebase/firestore";
 import db from "../firebase/initFirebase"
 
 export default {
@@ -33,6 +33,12 @@ export default {
         data.id = exposition.id;
         this.exposition = data;
       }
+    },
+    // FUNCIÓN PARA MILI PARA INCREMENTAR CONTADOR DE LIKES.
+    async incrementLikeCounter() {
+      await updateDoc(doc(db, "muestras", this.slug), {
+        likes: increment(1) // Nota: Si en Firestore el contador de likes se llama algo distitno de "likes", cambiar acá
+      });
     }
   },
   beforeMount() {
