@@ -1,5 +1,5 @@
 <template>
-  <h1>404: not found!</h1>
+  <div class="header">404: not found!</div>
 </template>
 
 <script>
@@ -9,9 +9,12 @@ export default {
 </script>
 
 <style scoped>
-h1{
+.header{
   font-size: xxx-large;
   color: black;
-  position: center;
+  margin-top: 15vh;
+  padding-top: 30vh;
+  width: 100%;
+  height: 100%;
 }
 </style>

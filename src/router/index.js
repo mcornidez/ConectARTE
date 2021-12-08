@@ -52,7 +52,8 @@ const routes = [
     path: '/registratumuestra',
     name: 'AddExposition',
     component: () => import(/* webpackChunkName: "Register" */ '../views/AddExposition.vue'),
-    //meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    props: true,
   },
   {
     path: '/miperfil',
@@ -66,16 +67,21 @@ const routes = [
     component: () => import(/* webpackChunkName: "Register" */ '../views/ForgotPassword.vue')
   },
   {
-    path: '*',
-    name: 'NotFound',
-    component: () => import(/* webpackChunkName: "notFound" */ '../views/NotFound.vue')
+    path: "/NotFound",
+    alias: "*",
+    name: "NotFound",
+    component: () =>
+        import(/* webpackChunkName: "NotFound" */ "../views/NotFound.vue"),
   },
 
 ]
 
 const router = new VueRouter({
   mode: "history",
-  routes
+  routes,
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  },
 });
 
 router.beforeEach((to, from, next) => {

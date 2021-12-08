@@ -56,12 +56,10 @@ import {mapGetters} from "vuex";
 export default {
   created () {
     window.addEventListener('scroll', this.handleScroll);
+    this.getMuestras();
   },
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll);
-  },
-  async beforeMount() {
-    await this.getMuestras();
   },
   name: 'Home',
   data(){
@@ -96,7 +94,15 @@ export default {
       await datos.docs.forEach((doc) => {
         const data = doc.data();
         data.id = doc.id;
-        this.expositions.push(data);
+        let no = false;
+        this.expositions.forEach((exp) => {
+          if (data.id === exp.id) {
+            no = true;
+          }
+        });
+        if (!no) {
+          this.expositions.push(data);
+        }
       })
       this.latest = datos.docs[datos.docs.length - 1];
       if (datos.empty)
@@ -104,8 +110,7 @@ export default {
       this.loading = false;
       },
     async handleScroll() {
-      console.log("prueba");
-      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
+      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
       if (bottomOfWindow) {
         await this.getMuestras();
       }

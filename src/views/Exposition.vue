@@ -12,12 +12,16 @@
         <p>{{ exposition.description }}</p>
       </div>
     </section>
+    <v-btn v-if="show" :to="{name: 'AddExposition', params: { id: exposition.id },}">
+      <span>Editar</span>
+    </v-btn>
   </div>
 </template>
 
 <script>
 import {getDoc, doc, updateDoc, increment} from "firebase/firestore";
 import db from "../firebase/initFirebase"
+import {mapGetters} from "vuex";
 
 export default {
   name: "Exposition",
@@ -25,10 +29,21 @@ export default {
     exposition: Object,
     slug: String,
   },
+  computed: {
+    ...mapGetters("user", {
+      getUserId: "getId",
+    }),
+    show() {
+      return this.getUserId === this.exposition.user;
+    }
+  },
   methods: {
     async getExposition() {
       if (this.slug) {
         const exposition = await getDoc(doc(db, "muestras", this.slug));
+        if (!exposition.exists()) {
+          await this.$router.push({name : "NotFound"})
+        }
         const data = exposition.data();
         data.id = exposition.id;
         this.exposition = data;
@@ -51,14 +66,17 @@ export default {
 
 <style scoped>
 #myagenda{
-  position:center;
   justify-content: center;
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
-  height:100vh;
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
 }
 
 #pageTitle{

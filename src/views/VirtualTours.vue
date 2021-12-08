@@ -21,14 +21,17 @@ export default {
 
 <style scoped>
 #virtualTours{
-  position:center;
   justify-content: center;
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
-  height:100vh;
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
 }
 
 #pageTitle{

@@ -47,7 +47,7 @@ export default {
       localStorage.setItem("USER", user.uid);
       const docs = await getDoc(doc(db, "users", user.uid));
       commit("setInfo", user);
-      commit("setArtist", docs.data());
+      commit("setArtist", docs.data().artist);
       commit("setToken", user.uid);
     },
     removeToken({ commit }) {

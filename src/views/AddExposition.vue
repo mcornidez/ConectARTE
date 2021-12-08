@@ -2,7 +2,7 @@
   <div id="background">
     <div id="pageTitle">
       <br>
-      <b>Registrá tu muestra</b>
+      <b>{{this.id? "Edita tu muestra" : "Registrá tu muestra"}}</b>
     </div>
     <div class="pageSubtitle">
       <b>Información de la muestra</b>
@@ -116,7 +116,7 @@ export default {
           muestras: arrayUnion(docRef),
         })
       }
-      await this.$router.push("/");
+      await this.$router.push({name: "Home"});
     },
     OnFileSelected(){
       const files = this.$refs.files.files;
@@ -144,7 +144,8 @@ export default {
   },
   async beforeMount() {
     if (this.id) {
-      this.exhibition = await getDoc(doc(db, "muestras", this.id)).data();
+      const muestra = await getDoc(doc(db, "muestras", this.id));
+      this.exhibition = muestra.data();
     }
   }
 }
@@ -189,7 +190,7 @@ export default {
   background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
-  height:100vh;
+  height:100%;
 }
 
 </style>
