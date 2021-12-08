@@ -74,7 +74,7 @@
         </div>
       </div>
       -->
-
+    <br>
     <div class="pageSubtitle">
       <br>
       <b>Ubicación</b>
