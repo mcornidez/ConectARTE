@@ -51,6 +51,12 @@
       class="btn">
     <span class="font">Contactanos</span>
   </v-btn>
+  <v-btn
+      :to="{name: 'Profile'}"
+      text
+      class="btn">
+    <span class="font">Mi Perfil</span>
+  </v-btn>
 </div>
 
 <v-spacer></v-spacer>
