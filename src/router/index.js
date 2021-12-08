@@ -22,6 +22,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/misMuestras',
+    name: 'MyExpositions',
+    component: () => import(/* webpackChunkName: "routines" */ '../views/MyExpositions.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/exposiciones/:slug',
     name: 'Exposition',
     props: true,

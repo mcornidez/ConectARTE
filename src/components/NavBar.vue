@@ -26,6 +26,13 @@
     <span class="font">Mi Agenda</span>
   </v-btn>
   <v-btn
+      :to="{name: 'MyExpositions'}"
+      text
+      v-show="$isArtist"
+      class="btn">
+    <span class="font">Mis muestras</span>
+  </v-btn>
+  <v-btn
       :to="{name: 'AddExposition'}"
       text
       v-show="$isArtist"

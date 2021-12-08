@@ -61,6 +61,7 @@ export default {
         artist: this.artist,
         username: this.user,
         agenda: [],
+        muestras: [],
       });
       updateProfile(credentials.user, {
         displayName: this.user,

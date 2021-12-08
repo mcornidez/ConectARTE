@@ -10,23 +10,23 @@
     <div class="form">
       <br>
       <label for="name">Nombre/Título: </label>
-      <input v-model="title" type="text" id="name" placeholder="Ingrese el nombre" class="input"/>
+      <input v-model="exhibition.name" type="text" id="name" placeholder="Ingrese el nombre" class="input"/>
       <br>
       <label for="description">Descripción/Texto curatorial: </label>
-      <input v-model="description" type="text" id="description" placeholder="Ingrese una descripción" class="input"/>
+      <input v-model="exhibition.description" type="text" id="description" placeholder="Ingrese una descripción" class="input"/>
       <br>
       <br>
       <label for="description">Imagen representativa: </label>
-      <input v-model="image" type="text" id="image" placeholder="Ingrese un link de alguna imagen representativa" class="input"/>
+      <input v-model="exhibition.image" type="text" id="image" placeholder="Ingrese un link de alguna imagen representativa" class="input"/>
       <br>
       <label for="initdate">Fecha de inicio: </label>
-      <input v-model="initdate" type="date" id="initdate" placeholder="Fecha de inicio" class="input"/>
+      <input v-model="exhibition.initdate" type="date" id="initdate" placeholder="Fecha de inicio" class="input"/>
       <br>
       <label for="enddate">Fecha de cierre: </label>
-      <input v-model="enddate" type="date" id="enddate" placeholder="Fecha de cierre" class="input"/>
+      <input v-model="exhibition.enddate" type="date" id="enddate" placeholder="Fecha de cierre" class="input"/>
       <br>
       <label for="link">Links de interés: </label>
-      <input v-model="link" type="text" id="link" placeholder="Ingrese la URL" class="input"/>
+      <input v-model="exhibition.link" type="text" id="link" placeholder="Ingrese la URL" class="input"/>
       <br>
       <label for="pictures">Subir imágenes: </label>
       <div class="input">
@@ -53,22 +53,22 @@
     <div class="form">
       <br>
       <label for="venueName">Nombre del lugar: </label>
-      <input v-model="venueName" type="text" id="venueName" placeholder="Ingrese el nombre" class="input"/>
+      <input v-model="exhibition.venueName" type="text" id="venueName" placeholder="Ingrese el nombre" class="input"/>
       <br>
       <label for="address">Dirección: </label>
-      <input v-model="address" type="text" id="address" placeholder="Ingrese la dirección" class="input"/>
+      <input v-model="exhibition.address" type="text" id="address" placeholder="Ingrese la dirección" class="input"/>
       <br>
       <label for="phone">Teléfono: </label>
-      <input v-model="phone" type="number" id="phone" placeholder="Ingrese el teléfono" class="input"/>
+      <input v-model="exhibition.phone" type="number" id="phone" placeholder="Ingrese el teléfono" class="input"/>
       <br>
       <label for="webpage">Página web: </label>
-      <input v-model="webpage" type="text" id="webpage" placeholder="Ingrese la URL" class="input"/>
+      <input v-model="exhibition.webpage" type="text" id="webpage" placeholder="Ingrese la URL" class="input"/>
       <br>
       <label for="inittime">Hora de apertura: </label>
-      <input v-model="inittime" type="time" id="inittime" placeholder="Ingrese la hora de apertura" class="input"/>
+      <input v-model="exhibition.inittime" type="time" id="inittime" placeholder="Ingrese la hora de apertura" class="input"/>
       <br>
       <label for="endtime">Hora de cierre: </label>
-      <input v-model="endtime" type="time" id="endtime" placeholder="Ingrese la hora de cierre" class="input"/>
+      <input v-model="exhibition.endtime" type="time" id="endtime" placeholder="Ingrese la hora de cierre" class="input"/>
     </div>
     <br>
     <button @click="registerExpo" class="btn">Registrar muestra</button>
@@ -77,53 +77,46 @@
 
 <script>
 import db from "../firebase/initFirebase";
-import {setDoc, doc, collection} from "firebase/firestore/lite";
+import { arrayUnion, updateDoc,setDoc,getDoc, doc, collection} from "firebase/firestore";
 
 import _ from 'lodash';
+import {mapGetters} from "vuex";
 export default {
   name: "AddExposition",
   data() {
     return {
-      id: null,
-      title: "",
-      description: "",
-      image: "",
-      initdate: "",
-      enddate: "",
-      link: "",
-      venueName: "",
-      address: "",
-      phone: "",
-      webpage: "",
-      inittime: "",
-      endtime: "",
+      exhibition: {},
       files: [],
       uploadFiles: [],
     }
   },
+  props: {
+    id: String,
+  },
+  computed: mapGetters("user", {
+    $getUserId: "getId",
+  }),
   methods: {
     async registerExpo() {
-      // if (this.validate(file) === "") {
       let docRef;
-      if (this.id === null)
-        docRef = doc(collection(db, "muestras"));
-      else
+      const userid = this.$getUserId;
+      if (this.id) {
         docRef = doc(db, "muestras", this.id);
-      const exhibition = {
-          name: this.title,
-          description: this.description,
-          image: this.image,
-          initdate: this.initdate,
-          enddate: this.enddate,
-          link: this.link,
-          venueName: this.venueName,
-          address: this.address,
-          phone: this.phone,
-          webpage: this.webpage,
-          inittime: this.inittime,
-          endtime: this.endtime
-        }
-      await setDoc(docRef, exhibition);
+      }
+      else {
+        docRef = doc(collection(db, "muestras"));
+        this.exhibition.user = userid;
+      }
+      if (this.exhibition.user !== userid) {
+        console.log("Esta rutina no es tuya no se como llegaste aca");
+      } else {
+        await setDoc(docRef, this.exhibition);
+        const user = doc(db,"users", userid);
+        await updateDoc(user, {
+          muestras: arrayUnion(docRef),
+        })
+      }
+      await this.$router.push("/");
     },
     OnFileSelected(){
       const files = this.$refs.files.files;
@@ -148,8 +141,12 @@ export default {
         return "Sólo válidos archivos .jpeg y .png";
       return null;
     },
+  },
+  async beforeMount() {
+    if (this.id) {
+      this.exhibition = await getDoc(doc(db, "muestras", this.id)).data();
+    }
   }
-
 }
 </script>
 
