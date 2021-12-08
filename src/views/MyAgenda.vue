@@ -176,4 +176,8 @@ img {
   width: 100%;
   object-fit: cover;
 }
+
+.loading {
+  font-size: 2em;
+}
 </style>

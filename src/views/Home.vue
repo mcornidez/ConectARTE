@@ -166,6 +166,7 @@ export default {
   background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
+  height: 100%;
 }
 
 #pageTitle{

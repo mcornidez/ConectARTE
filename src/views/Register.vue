@@ -33,7 +33,7 @@
 
 <script>
 import db from "../firebase/initFirebase"
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import {doc, setDoc} from "firebase/firestore";
 import {mapActions} from "vuex";
 export default {
@@ -62,9 +62,6 @@ export default {
         username: this.user,
         agenda: [],
         muestras: [],
-      });
-      updateProfile(credentials.user, {
-        displayName: this.user,
       });
       this.$update({user: credentials.user})
       await this.$router.push({name: 'Home'});

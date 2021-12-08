@@ -22,6 +22,7 @@
   <v-btn
       :to="{name: 'MyAgenda'} "
       text
+      v-show="$isLoggedIn"
       class="btn">
     <span class="font">Mi Agenda</span>
   </v-btn>
@@ -54,6 +55,7 @@
   <v-btn
       :to="{name: 'Profile'}"
       text
+      v-show="$isLoggedIn"
       class="btn">
     <span class="font">Mi Perfil</span>
   </v-btn>
@@ -94,6 +96,11 @@ import {signOut, getAuth} from "firebase/auth";
 import {mapGetters} from "vuex";
 export default {
   name: "NavBar.vue",
+  data() {
+    return {
+      started: false,
+    };
+  },
   computed: mapGetters("user", {
     $isLoggedIn: "isLoggedIn",
     $isArtist: "isArtist"
@@ -106,6 +113,11 @@ export default {
         await this.$router.push({name: 'Home'});
       }
     }
+  },
+  watch: {
+    $isLoggedIn() {
+      this.started = true;
+    },
   },
 }
 </script>

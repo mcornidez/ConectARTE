@@ -6,6 +6,7 @@ export default {
     token: null,
     info: null,
     artist: null,
+    displayName: null,
   },
   getters: {
     isLoggedIn(state) {
@@ -18,7 +19,7 @@ export default {
       return state.token;
     },
     getName(state) {
-      return state.info.displayName;
+      return state.displayName;
     },
     getEmail(state) {
       return state.info.email;
@@ -33,6 +34,9 @@ export default {
     },
     setArtist(state, artist) {
       state.artist = artist;
+    },
+    setDisplayName(state, displayName) {
+      state.displayName = displayName;
     }
   },
   actions: {
@@ -49,12 +53,14 @@ export default {
       commit("setInfo", user);
       commit("setArtist", docs.data().artist);
       commit("setToken", user.uid);
+      commit("setDisplayName", docs.data().username)
     },
     removeToken({ commit }) {
       localStorage.removeItem("USER");
       commit("setToken", null);
       commit("setInfo", null);
       commit("setArtist", null);
+      commit("setDisplayName", null);
     },
   },
 };

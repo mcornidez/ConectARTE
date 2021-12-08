@@ -17,11 +17,10 @@
         <br>
         <b>Nombre de usuario: </b>
         <br>
-        <input required v-model="username" type="text" name="username" class="input"/>
+        <input required v-model="user.username" type="text" name="username" class="input"/>
         <br>
-        <b>Email: </b>
+        <b>Email: {{this.email}}</b>
         <br>
-        <input required v-model="email" type="email" name="email" class="input"/>
         <br>
         <b>Cantidad de muestras: {{user.agenda.length}}</b>
         <br>
@@ -34,17 +33,15 @@
 
 <script>
 import {mapGetters} from "vuex";
-import {getDoc, doc} from "firebase/firestore";
+import {getDoc, doc, updateDoc} from "firebase/firestore";
 import db from "../firebase/initFirebase"
-//import {getAuth} from "firebase/auth";
-
-
 export default {
   name: "Profile",
   data() {
     return {
-      user: null,
-      username:"",
+      user: {
+        agenda: [],
+      },
       email:"",
       id:"",
     };
@@ -52,27 +49,33 @@ export default {
   computed: mapGetters("user", {
     $getUserId: "getId",
     $getEmail: "getEmail",
-    $getUserName: "getName"
   }),
   methods: {
     async getUser() {
-      const docs = await getDoc(doc(db, "users", this.$getUserId));
-      this.user = docs.data();
-      this.email = this.$getEmail;
-      this.username = this.$getUserName;
-      this.id = this.$getUserId;
+      if (this.$getUserId) {
+        const docs = await getDoc(doc(db, "users", this.$getUserId));
+        this.user = docs.data();
+        this.email = this.$getEmail;
+        this.id = this.$getUserId;
+      }
     },
     async updateProf() {
-      /*const auth = getAuth();
-      this.username = "hola";
-      await auth.updateUser(this.id, {email: "toto@gmail.com"});*/
-      //actualizar datos del backend
+      const userRef = doc(db, "users", this.$getUserId);
+      await updateDoc(userRef, {
+        name: this.user.name,
+        surname: this.user.surname,
+        username: this.user.username,
+      });
+      this.$router.push({name: "Home"});
+    }
+  },
+  watch: {
+    $getUserId() {
+      this.getUser();
     }
   },
   beforeMount() {
-    if (!this.user) {
-      this.getUser();
-    }
+    this.getUser();
   },
 
 };
