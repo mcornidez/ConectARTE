@@ -40,7 +40,14 @@ export default {
   computed: {
     filteredExpositions: function(){
       return this.expositions.filter((exposition) => {
-        return exposition.name.match(this.search) || exposition.description.match(this.search);
+        let result = false;
+        if (exposition.name != null) {
+          result = exposition.name.match(this.search);
+        }
+        if (exposition.description != null) {
+          result = result || exposition.description.match(this.search);
+        }
+        return result;
       })
     },
     ...mapGetters("user" ,{
@@ -60,9 +67,11 @@ export default {
         const muestras = user.data().muestras;
         for (let i = 0; i < muestras.length; i++) {
           const doc = await getDoc(muestras[i]);
-          const data = doc.data();
-          data.id = doc.id;
-          this.expositions.push(data);
+          if (doc.exists()) {
+            const data = doc.data();
+            data.id = doc.id;
+            this.expositions.push(data);
+          }
         }
       }
     },
@@ -82,7 +91,7 @@ export default {
   background-attachment: fixed;
   margin-top: 15vh;
   padding: 0;
-  height:100vh;
+  height:100%;
 }
 
 #pageTitle{
