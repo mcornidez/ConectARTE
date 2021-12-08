@@ -7,18 +7,27 @@
     <div id="searchBar">
       <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
     </div>
-    <div class="grid-container">
+    <div class="expo-container">
       <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
-        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params: { exposition: exposition, slug: exposition.id }}">
-          <div class="grid-item">
-            <img :src='exposition.image' alt="image"/>
-            <h2>{{exposition.name}}</h2>
-            <p>{{exposition.description}}</p>
+        <router-link style="text-decoration: none; color: inherit;" :to="{name: 'Exposition', params: { exposition: exposition, slug: exposition.id },}">
+          <div class="grid-expo-item">
+            <div class="expoContainer">
+              <div class="expoItem">
+                <img :src='exposition.image'/>
+              </div>
+              <div class="expoItem">
+                <h2>{{exposition.name}}</h2>
+                <p>{{exposition.description}}</p>
+                <div class="addButton">
+                  <v-btn @click="removeFromAgenda(exposition.id)">
+                    <span>Quitar de mi agenda</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
           </div>
         </router-link>
       </div>
-    </div>
-    <div>
     </div>
   </div>
 </template>
@@ -109,11 +118,6 @@ export default {
   margin-left: 450px;
 }
 
-img {
-  max-width: 30%;
-  height: auto;
-}
-
 input[type="text"]{
   padding: 8px;
   width: 100%;
@@ -121,30 +125,51 @@ input[type="text"]{
   background-color: white;
 }
 
-.grid-container {
-  display: inline-grid;
-  margin-top: 5vh;
+.expo-container {
+  display: grid;
   width: 60%;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-row-gap: 30px;
-  margin-left: -450px;
-
+  /*Scrolling*/
+  max-height: 80%;
+  box-sizing: border-box;
+  overflow: auto;
+  margin-left: 5%;
+  margin-top: 25px;
 }
-.grid-item {
+.expo-container::-webkit-scrollbar {
+  display: none;
+}
+.grid-expo-item {
   background-color: lightgrey;
   padding: 20px;
   font-size: 17px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
-  width: auto;
-  /*display: flex;*/
+}
+.expoItem {
+  padding: 5px;
+  font-size: 17px;
+  overflow: hidden;
+  text-align: left;
+  justify-content: left;
+  grid-gap: 10px;
 }
 
-.btn{
-  margin-top: 54px;
-  margin-left: 15px;
-  text-underline: transparent;
-  border: 0.5px solid black;
+.addButton {
+  padding: 5px;
+  text-align: right;
+  float: left;
+}
+
+.expoContainer {
+  display: inline-grid;
+  grid-template-columns: 300px 2fr;
+}
+
+img {
+  width: 100%;
+  object-fit: cover;
 }
 </style>

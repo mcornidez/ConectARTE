@@ -9,25 +9,37 @@
     </div>
     <div class="form">
       <br>
-      <label for="name">Nombre/Título: </label>
-      <input v-model="exhibition.name" type="text" id="name" placeholder="Ingrese el nombre" class="input"/>
+      <div class="item">
+        <label for="name">Nombre/Título: </label>
+        <input v-model="exhibition.name" type="text" id="name" placeholder="Ingrese el nombre" class="input"/>
+      </div>
       <br>
-      <label for="description">Descripción/Texto curatorial: </label>
-      <input v-model="exhibition.description" type="text" id="description" placeholder="Ingrese una descripción" class="input"/>
+      <div class="item">
+        <label for="description">Descripción: </label>
+        <input v-model="exhibition.description" type="text" id="description" placeholder="Ingrese una descripción" class="input"/>
+      </div>
       <br>
+      <div class="item">
+        <label for="description">Imagen representativa: </label>
+        <input v-model="exhibition.image" type="text" id="image" placeholder="Ingrese un link de alguna imagen representativa" class="input"/>
+      </div>
       <br>
-      <label for="description">Imagen representativa: </label>
-      <input v-model="exhibition.image" type="text" id="image" placeholder="Ingrese un link de alguna imagen representativa" class="input"/>
+      <div class="item">
+        <label for="initdate">Fecha de inicio: </label>
+        <input v-model="exhibition.initdate" type="date" id="initdate" placeholder="Fecha de inicio" class="input"/>
+      </div>
       <br>
-      <label for="initdate">Fecha de inicio: </label>
-      <input v-model="exhibition.initdate" type="date" id="initdate" placeholder="Fecha de inicio" class="input"/>
+      <div class="item">
+        <label for="enddate">Fecha de cierre: </label>
+        <input v-model="exhibition.enddate" type="date" id="enddate" placeholder="Fecha de cierre" class="input"/>
+      </div>
       <br>
-      <label for="enddate">Fecha de cierre: </label>
-      <input v-model="exhibition.enddate" type="date" id="enddate" placeholder="Fecha de cierre" class="input"/>
+      <div class="item">
+        <label for="link">Links de interés: </label>
+        <input v-model="exhibition.link" type="text" id="link" placeholder="Ingrese la URL" class="input"/>
+      </div>
       <br>
-      <label for="link">Links de interés: </label>
-      <input v-model="exhibition.link" type="text" id="link" placeholder="Ingrese la URL" class="input"/>
-      <br>
+      <!--
       <label for="pictures">Subir imágenes: </label>
       <div class="input">
         <input multiple type="file" ref="files" id="pictures" @change="OnFileSelected"/>
@@ -45,6 +57,7 @@
           </div>
         </div>
       </div>
+      -->
     </div>
     <div class="pageSubtitle">
       <br>
@@ -52,23 +65,35 @@
     </div>
     <div class="form">
       <br>
-      <label for="venueName">Nombre del lugar: </label>
-      <input v-model="exhibition.venueName" type="text" id="venueName" placeholder="Ingrese el nombre" class="input"/>
+      <div class="item">
+        <label for="venueName">Nombre del lugar: </label>
+        <input v-model="exhibition.venueName" type="text" id="venueName" placeholder="Ingrese el nombre" class="input"/>
+      </div>
       <br>
-      <label for="address">Dirección: </label>
-      <input v-model="exhibition.address" type="text" id="address" placeholder="Ingrese la dirección" class="input"/>
+      <div class="item">
+        <label for="address">Dirección: </label>
+        <input v-model="exhibition.address" type="text" id="address" placeholder="Ingrese la dirección" class="input"/>
+      </div>
       <br>
-      <label for="phone">Teléfono: </label>
-      <input v-model="exhibition.phone" type="number" id="phone" placeholder="Ingrese el teléfono" class="input"/>
+      <div class="item">
+        <label for="phone">Teléfono: </label>
+        <input v-model="exhibition.phone" type="number" id="phone" placeholder="Ingrese el teléfono" class="input"/>
+      </div>
       <br>
-      <label for="webpage">Página web: </label>
-      <input v-model="exhibition.webpage" type="text" id="webpage" placeholder="Ingrese la URL" class="input"/>
+      <div class="item">
+        <label for="webpage">Página web: </label>
+        <input v-model="exhibition.webpage" type="text" id="webpage" placeholder="Ingrese la URL" class="input"/>
+      </div>
       <br>
-      <label for="inittime">Hora de apertura: </label>
-      <input v-model="exhibition.inittime" type="time" id="inittime" placeholder="Ingrese la hora de apertura" class="input"/>
+      <div class="item">
+        <label for="inittime">Hora de apertura: </label>
+        <input v-model="exhibition.inittime" type="time" id="inittime" placeholder="Ingrese la hora de apertura" class="input"/>
+      </div>
       <br>
-      <label for="endtime">Hora de cierre: </label>
-      <input v-model="exhibition.endtime" type="time" id="endtime" placeholder="Ingrese la hora de cierre" class="input"/>
+      <div class="item">
+        <label for="endtime">Hora de cierre: </label>
+        <input v-model="exhibition.endtime" type="time" id="endtime" placeholder="Ingrese la hora de cierre" class="input"/>
+      </div>
     </div>
     <br>
     <button @click="registerExpo" class="btn">Registrar muestra</button>
@@ -211,8 +236,13 @@ export default {
   height:100%;
 }
 
-.btn {
-  margin: 2vh;
+.item{
+  height: 50px;
+}
+
+.input{
+  float: right;
+  margin-right: 5%;
 }
 
 </style>
