@@ -11,8 +11,8 @@
       <label for="surname">Ingrese su apellido: </label>
       <input required v-model="surname" type="text" id="surname" class="input" placeholder="Ingrese su apellido"/>
       <br>
-      <label for="mail">Ingrese su mail: </label>
-      <input required v-model="mail" type="email" id="mail" class="input" placeholder="Ingrese su mail"/>
+      <label for="mail">Ingrese su email: </label>
+      <input required v-model="mail" type="email" id="mail" class="input" placeholder="Ingrese su email"/>
       <br>
       <label for="password">Ingrese una contraseña: </label>
       <input required v-model="password" type="password" id="password" class="input" placeholder="Ingrese una contraseña"/>
