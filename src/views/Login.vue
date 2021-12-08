@@ -13,7 +13,7 @@
       <br>
       <input required v-model="password" type="password" id="password" placeholder="Ingrese su contraseña" class="input"/>
       <br>
-      <button @click="login" class="btn">Ingresar</button>
+      <v-btn dark @click="login" class="btn">Ingresar</v-btn>
       <br>
       <br>
       <router-link :to="{name: 'ForgotPassword'}">¿Olvidó su contraseña?</router-link>

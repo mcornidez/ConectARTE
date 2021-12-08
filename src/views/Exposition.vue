@@ -40,10 +40,10 @@
       <v-btn v-if="show" :to="{name: 'AddExposition', params: { id: exposition.id },}" class="btn">
         <span>Editar</span>
       </v-btn>
-      <v-btn @click="addToAgenda(exposition.id)" class="btn">
+      <v-btn v-if="getUserId" @click="addToAgenda" class="btn">
         <span>Añadir a mi agenda</span>
       </v-btn>
-      <v-btn @click="incrementLikeCounter()" class="btn">
+      <v-btn v-if="getUserId" @click="incrementLikeCounter()" class="btn">
         <v-icon>mdi-thumb-up</v-icon>
         <span style="margin-left: 5px">Me gusta</span>
       </v-btn>
@@ -82,10 +82,10 @@ export default {
         this.exposition = data;
       }
     },
-    async addToAgenda(id) {
-      const user = doc(db,"users", this.$getUserId);
+    async addToAgenda() {
+      const user = doc(db,"users", this.getUserId);
       await updateDoc(user, {
-        agenda: arrayUnion(doc(db,"muestras",id)),
+        agenda: arrayUnion(doc(db,"muestras",this.slug)),
       })
     },
     // FUNCIÓN PARA MILI PARA INCREMENTAR CONTADOR DE LIKES.
