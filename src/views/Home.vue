@@ -79,7 +79,14 @@ export default {
   computed: {
     filteredExpositions: function(){
       return this.expositions.filter((exposition) => {
-          return exposition.name.match(this.search) || exposition.description.match(this.search);
+        let result = false;
+        if (exposition.name != null) {
+          result = exposition.name.match(this.search);
+        }
+        if (exposition.description != null) {
+          result = result || exposition.description.match(this.search);
+        }
+        return result;
       })
     },
     ...mapGetters("user" ,{
@@ -110,7 +117,7 @@ export default {
       this.loading = false;
       },
     async handleScroll() {
-      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight;
       if (bottomOfWindow) {
         await this.getMuestras();
       }
