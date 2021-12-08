@@ -57,30 +57,4 @@ input[type="text"]{
   background-color: white;
 }
 
-.grid-container {
-  display: inline-grid;
-  margin-top: 5vh;
-  width: 60%;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  grid-row-gap: 30px;
-  margin-left: -450px;
-
-}
-.grid-item {
-  background-color: lightgrey;
-  padding: 20px;
-  font-size: 17px;
-  overflow: hidden;
-  text-align: left;
-  justify-content: left;
-  width: auto;
-  /*display: flex;*/
-}
-
-.btn{
-  margin-top: 54px;
-  margin-left: 15px;
-  text-underline: transparent;
-  border: 0.5px solid black;
-}
 </style>

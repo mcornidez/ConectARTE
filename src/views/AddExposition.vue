@@ -2,7 +2,7 @@
   <div id="background">
     <div id="pageTitle">
       <br>
-      <b>{{this.id? "Edita tu muestra" : "Registrá tu muestra"}}</b>
+      <b>{{this.id? "Editá tu muestra" : "Registrá tu muestra"}}</b>
     </div>
     <div class="pageSubtitle">
       <b>Información de la muestra</b>
@@ -114,6 +114,9 @@
         <button v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</button>
       </form>
     </div>
+    <br>
+    <v-btn dark @click="registerExpo" class="btn">Guardar</v-btn>
+    <v-btn dark v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</v-btn>
   </div>
 </template>
 
@@ -121,7 +124,6 @@
 import db from "../firebase/initFirebase";
 import { deleteDoc, arrayRemove, arrayUnion, updateDoc,setDoc,getDoc, doc, collection} from "firebase/firestore";
 
-import _ from 'lodash';
 import {mapGetters} from "vuex";
 export default {
   name: "AddExposition",
@@ -129,7 +131,6 @@ export default {
     return {
       exhibition: {},
       files: [],
-      uploadFiles: [],
     }
   },
   props: {
@@ -151,7 +152,7 @@ export default {
         this.exhibition.likes = 0;
       }
       if (this.exhibition.user !== userid) {
-        console.log("Esta rutina no es tuya no se como llegaste aca");
+        console.log("Esta muestra no es tuya no se como llegaste acá");
       } else {
         await setDoc(docRef, this.exhibition);
         const user = doc(db,"users", userid);
@@ -165,7 +166,7 @@ export default {
       if (this.id) {
         const userid = this.$getUserId;
         if (this.exhibition.user !== userid) {
-          console.log("Esta rutina no es tuya no se como llegaste aca");
+          console.log("Esta muestra no es tuya no se como llegaste acá");
         } else {
           const docRef = doc(db, "muestras", this.id);
           await deleteDoc(docRef);
@@ -176,20 +177,6 @@ export default {
         }
       }
       await this.$router.push({name: "Home"});
-    },
-    OnFileSelected(){
-      const files = this.$refs.files.files;
-      this.uploadFiles = [...this.uploadFiles, ...files];
-
-      this.files = [
-        ...this.files,
-        ..._.map(files, file => ({
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          invalidMessage: this.validate(file)
-        }))
-      ]
     },
     validate(file){
       const MAX_SIZE = 1000000;
@@ -259,6 +246,10 @@ export default {
 .input{
   float: right;
   margin-right: 5%;
+}
+
+.btn{
+  margin: 2%;
 }
 
 </style>

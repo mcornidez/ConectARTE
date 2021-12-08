@@ -5,7 +5,7 @@
       <b>Mi Agenda</b>
     </div>
     <div id="searchBar">
-      <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
+      <input type="text" v-model="search" id="search" placeholder="Buscá por artista, lugar o palabra clave"/>
     </div>
     <div class="expo-container">
       <div v-for="exposition in filteredExpositions" :key="exposition.id" class="single-exposition">
@@ -18,11 +18,6 @@
               <div class="expoItem">
                 <h2>{{exposition.name}}</h2>
                 <p>{{exposition.description}}</p>
-                <div class="addButton">
-                  <v-btn @click="removeFromAgenda(exposition.id)">
-                    <span>Quitar de mi agenda</span>
-                  </v-btn>
-                </div>
               </div>
             </div>
           </div>

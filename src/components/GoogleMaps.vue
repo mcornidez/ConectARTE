@@ -1,7 +1,7 @@
 <template>
   <GmapMap
       :center="center"
-      :zoom="7"
+      :zoom="2"
       style="width: 1000px; height: 500px; margin: auto"
   >
     <GmapInfoWindow
@@ -29,7 +29,7 @@
 export default {
   data () {
     return {
-      center: {lat: 48.8606, lng: 2.3376},
+      center: {lat: 0, lng: 0},
       infoWindowOptions:{
         pixelOffset:{
           width: 0,

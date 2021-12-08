@@ -15,11 +15,6 @@
               <div class="expoItem">
                 <h2>{{exposition.name}}</h2>
                 <p>{{exposition.description}}</p>
-                <div class="addButton">
-                  <v-btn @click="removeFromAgenda(exposition.id)">
-                    <span>Eliminar muestra</span>
-                  </v-btn>
-                </div>
               </div>
             </div>
           </div>

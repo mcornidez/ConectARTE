@@ -22,7 +22,7 @@
         <b>Email: {{this.email}}</b>
         <br>
         <br>
-        <b>Cantidad de muestras: {{user.agenda.length}}</b>
+        <b>Cantidad de muestras: {{user.muestras.length}}</b>
         <br>
         <br>
         <button type="submit" class="btn">Actualizar mis datos</button>

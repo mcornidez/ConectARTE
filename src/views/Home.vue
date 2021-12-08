@@ -5,7 +5,7 @@
       <b>Inicio</b>
     </div>
     <div id="searchBar">
-      <input type="text" v-model="search" id="search" placeholder="Busca por artista, lugar o palabra clave"/>
+      <input type="text" v-model="search" id="search" placeholder="Buscá por artista, lugar o palabra clave"/>
     </div>
     <div class="home-container">
         <div class="expo-container">
@@ -19,10 +19,9 @@
                   <div class="expoItem">
                     <h2>{{exposition.name}}</h2>
                     <p>{{exposition.description}}</p>
-                    <div class="addButton">
-                      <v-btn @click="addToAgenda(exposition.id)">
-                        <span>Añadir a mi agenda</span>
-                      </v-btn>
+                    <div style="float: left">
+                      <v-icon>mdi-thumb-up</v-icon>
+                      <span> {{exposition.likes}} me gusta</span>
                     </div>
                   </div>
                 </div>
@@ -49,14 +48,14 @@
 
 <script>
 import db from "../firebase/initFirebase";
-import {collection, query, limit, getDocs, startAfter, orderBy, onSnapshot, arrayUnion, doc, updateDoc} from "firebase/firestore";
+import {collection, query, limit, getDocs, startAfter, orderBy, arrayUnion, doc, updateDoc} from "firebase/firestore";
 import {mapGetters} from "vuex";
 
 
 export default {
   created () {
     window.addEventListener('scroll', this.handleScroll);
-    this.getMuestras();
+    this.getMuestrasAlpha();
   },
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll);
@@ -123,28 +122,48 @@ export default {
       }
     },
     async getMuestrasAlpha() {
-      const citiesCol = collection(db, "muestras");
-      const q = query(citiesCol, orderBy("name"));
-      await onSnapshot(q, (querySnapshot) => {
-        this.expositions = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data.id = doc.id;
+      this.loading = true;
+      const q = query(collection(db, "muestras"), limit(5), orderBy("name"), startAfter(this.latest || 0));
+      const datos = await getDocs(q);
+      await datos.docs.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        let no = false;
+        this.expositions.forEach((exp) => {
+          if (data.id === exp.id) {
+            no = true;
+          }
+        });
+        if (!no) {
           this.expositions.push(data);
-        })
-      });
+        }
+      })
+      this.latest = datos.docs[datos.docs.length - 1];
+      if (datos.empty)
+        window.removeEventListener('scroll', this.handleScroll);
+      this.loading = false;
     },
     async getMuestrasDate() {
-      const citiesCol = collection(db, "muestras");
-      const q = query(citiesCol, orderBy("date"));
-      await onSnapshot(q, (querySnapshot) => {
-        this.expositions = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data.id = doc.id;
+      this.loading = true;
+      const q = query(collection(db, "muestras"), limit(5), orderBy("enddate"), startAfter(this.latest || 0));
+      const datos = await getDocs(q);
+      await datos.docs.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        let no = false;
+        this.expositions.forEach((exp) => {
+          if (data.id === exp.id) {
+            no = true;
+          }
+        });
+        if (!no) {
           this.expositions.push(data);
-        })
-      });
+        }
+      })
+      this.latest = datos.docs[datos.docs.length - 1];
+      if (datos.empty)
+        window.removeEventListener('scroll', this.handleScroll);
+      this.loading = false;
     },
     async addToAgenda(id) {
       const user = doc(db,"users", this.$getUserId);
@@ -165,6 +184,7 @@ export default {
   background-size: cover;
   background-attachment: fixed;
   margin-top: 15vh;
+  height:100%;
   padding: 0;
   height: 100%;
 }
