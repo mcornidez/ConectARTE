@@ -41,7 +41,7 @@
         <span>Editar</span>
       </v-btn>
       <v-btn v-if="getUserId" @click="addToAgenda" class="btn">
-        <span>Añadir a mi agenda</span>
+        <span>{{ inAgenda ? "Eliminar de mi agenda" : "Agregar a mi agenda" }}</span>
       </v-btn>
       <v-btn v-if="getUserId" @click="incrementLikeCounter()" class="btn">
         <v-icon>mdi-thumb-up</v-icon>
@@ -52,12 +52,17 @@
 </template>
 
 <script>
-import {getDoc, doc, updateDoc, increment, arrayUnion} from "firebase/firestore";
-import db from "../firebase/initFirebase"
+import {getDoc, doc, updateDoc, increment, arrayUnion, arrayRemove} from "firebase/firestore";
+import db from "../firebase/initFirebase";
 import {mapGetters} from "vuex";
 
 export default {
   name: "Exposition",
+  data() {
+    return {
+      inAgenda: false
+    };
+  },
   props: {
     exposition: Object,
     slug: String,
@@ -82,13 +87,32 @@ export default {
         this.exposition = data;
       }
     },
+    async getUser() {
+      if (this.getUserId) {
+        const docs = await getDoc(doc(db, "users", this.getUserId));
+        let agenda = docs.data().agenda;
+        agenda.forEach((muestra) => {
+          if (this.slug === muestra.id)
+            this.inAgenda = true;
+        })
+        this.id = this.$getUserId;
+      }
+    },
     async addToAgenda() {
       const user = doc(db,"users", this.getUserId);
-      await updateDoc(user, {
-        agenda: arrayUnion(doc(db,"muestras",this.slug)),
-      })
+      if (this.inAgenda) {
+        await updateDoc(user, {
+          agenda: arrayRemove(doc(db,"muestras",this.slug)),
+        })
+        this.inAgenda = false;
+      }
+      else {
+        await updateDoc(user, {
+          agenda: arrayUnion(doc(db,"muestras",this.slug)),
+        })
+        this.inAgenda = true;
+      }
     },
-    // FUNCIÓN PARA MILI PARA INCREMENTAR CONTADOR DE LIKES.
     async incrementLikeCounter() {
       await updateDoc(doc(db, "muestras", this.slug), {
         likes: increment(1) // Nota: Si en Firestore el contador de likes se llama algo distitno de "likes", cambiar acá
@@ -96,8 +120,14 @@ export default {
     }
   },
   beforeMount() {
+    this.getUser();
     if (!this.exposition) {
       this.getExposition();
+    }
+  },
+  watch: {
+    getUserId() {
+      this.getUser();
     }
   },
 }
