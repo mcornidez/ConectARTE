@@ -106,8 +106,8 @@ export default {
   background-size: cover;
   background-attachment: fixed;
   margin-top: 15vh;
+  height:100%;
   padding: 0;
-  height:100vh;
 }
 
 #pageTitle{
@@ -142,13 +142,11 @@ input[type="text"]{
   /*Scrolling*/
   max-height: 80%;
   box-sizing: border-box;
-  overflow: auto;
   margin-left: 5%;
   margin-top: 25px;
+  overflow: hidden;
 }
-.expo-container::-webkit-scrollbar {
-  display: none;
-}
+
 .grid-expo-item {
   background-color: lightgrey;
   padding: 20px;

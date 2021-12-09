@@ -230,12 +230,9 @@ input[type="text"]{
   /*Scrolling*/
   max-height: 80%;
   box-sizing: border-box;
-  overflow: auto;
+  overflow: hidden;
   margin-left: 5%;
   margin-top: 25px;
-}
-.expo-container::-webkit-scrollbar {
-  display: none;
 }
 .grid-expo-item {
   background-color: lightgrey;

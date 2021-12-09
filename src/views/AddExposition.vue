@@ -89,8 +89,12 @@
         <input v-model="exhibition.endtime" type="time" id="endtime" placeholder="Ingrese la hora de cierre" class="input" required/>
       </div>
         <br>
-        <v-btn dark type="submit" class="btn">Registrar muestra</v-btn>
-        <v-btn dark v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</v-btn>
+        <div class="boton">
+          <v-btn dark type="submit" class="btn">
+            <b>{{this.id? "Guardar cambios" : "Registrar muestra"}}</b>
+          </v-btn>
+          <v-btn dark v-if="id" @click="deleteExpo" class="btn">Eliminar muestra</v-btn>
+        </div>
       </form>
     </div>
   </div>
@@ -226,6 +230,10 @@ export default {
 
 .btn{
   margin: 2%;
+}
+
+.boton{
+  text-align: center;
 }
 
 </style>
