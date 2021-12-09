@@ -11,7 +11,7 @@
         </div>
         <div style="text-align: left;">
           <v-icon>mdi-thumb-up</v-icon>
-          <span> {{exposition.likes}} me gusta</span>
+          <span> {{exposition.likes}} Me gusta</span>
         </div>
         <div class="expo-descr">
           <p>{{ exposition.description }}</p>
