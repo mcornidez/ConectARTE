@@ -139,7 +139,7 @@ export default {
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
-  margin-top: 15vh;
+  margin-top: 10vh;
   padding: 0;
   position: center;
   height: 100%;
@@ -147,7 +147,6 @@ export default {
 
 #pageTitle {
   font-size: xx-large;
-  font-weight: lighter;
   color: black;
   height: 15vh;
   text-align: left;
@@ -178,7 +177,7 @@ input[type="text"] {
 
 .home-item {
   flex-basis: 100%;
-  font-size: 17px;
+  font-size: 14px;
   margin-left: 10%;
   margin-top: 25px;
   margin-right: 5%;
@@ -204,7 +203,7 @@ input[type="text"] {
 
 .expo-descr {
   padding: 5px;
-  font-size: 17px;
+  font-size: 14px;
   overflow: hidden;
   text-align: left;
   justify-content: left;

@@ -176,13 +176,13 @@ export default {
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
-  margin-top: 15vh;
+  margin-top: 10vh;
   height:100%;
   padding: 0;
 }
 
 #pageTitle{
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: lighter;
   color: black;
   height: 15vh;
@@ -196,10 +196,12 @@ export default {
   position: center;
   width: 40%;
   margin-left: 30%;
+  font-size: 14px;
 }
 
 img {
-  width: 100%;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
 }
 
@@ -216,7 +218,7 @@ input[type="text"]{
 }
 
 .home-item {
-  font-size: 17px;
+  font-size: 12px;
   margin-left: 10%;
   margin-top: 25px;
   margin-right: 5%;
@@ -227,6 +229,7 @@ input[type="text"]{
   width: 60%;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-row-gap: 30px;
+  align-items: center;
   /*Scrolling*/
   max-height: 80%;
   box-sizing: border-box;
@@ -237,24 +240,18 @@ input[type="text"]{
 .grid-expo-item {
   background-color: lightgrey;
   padding: 20px;
-  font-size: 17px;
+  font-size: 12px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
 }
 .expoItem {
   padding: 5px;
-  font-size: 17px;
+  font-size: 12px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
   grid-gap: 10px;
-}
-
-.addButton {
-  padding: 5px;
-  text-align: right;
-  float: left;
 }
 
 .expoContainer {
@@ -265,7 +262,7 @@ input[type="text"]{
 .orderBy {
   background-color: lightgrey;
   padding: 20px;
-  font-size: 17px;
+  font-size: 14px;
   text-align: left;
   justify-content: left;
 }

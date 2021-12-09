@@ -72,7 +72,7 @@ export default {
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
-  margin-top: 15vh;
+  margin-top: 10vh;
   padding: 0;
   position:absolute;
   top:0;
@@ -82,7 +82,7 @@ export default {
 }
 
 #pageTitle{
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: lighter;
   color: black;
   height: 15vh;

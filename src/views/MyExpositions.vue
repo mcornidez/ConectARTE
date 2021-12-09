@@ -100,13 +100,13 @@ export default {
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
-  margin-top: 15vh;
+  margin-top: 10vh;
   height:100%;
   padding: 0;
 }
 
 #pageTitle{
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: lighter;
   color: black;
   height: 15vh;
@@ -139,25 +139,20 @@ input[type="text"]{
 .grid-expo-item {
   background-color: lightgrey;
   padding: 20px;
-  font-size: 17px;
+  font-size: 12px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
 }
 .expoItem {
   padding: 5px;
-  font-size: 17px;
+  font-size: 12px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
   grid-gap: 10px;
 }
 
-.addButton {
-  padding: 5px;
-  text-align: right;
-  float: left;
-}
 
 .expoContainer {
   display: inline-grid;
@@ -165,7 +160,8 @@ input[type="text"]{
 }
 
 img {
-  width: 100%;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
 }
 

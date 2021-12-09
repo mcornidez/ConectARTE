@@ -105,13 +105,13 @@ export default {
   background-image: url("../assets/FondoHome.png");
   background-size: cover;
   background-attachment: fixed;
-  margin-top: 15vh;
+  margin-top: 10vh;
   height:100%;
   padding: 0;
 }
 
 #pageTitle{
-  font-size: xx-large;
+  font-size: x-large;
   font-weight: lighter;
   color: black;
   height: 15vh;
@@ -125,6 +125,7 @@ export default {
   position: center;
   width: 40%;
   margin-left: 450px;
+  font-size: 14px;
 }
 
 input[type="text"]{
@@ -150,14 +151,14 @@ input[type="text"]{
 .grid-expo-item {
   background-color: lightgrey;
   padding: 20px;
-  font-size: 17px;
+  font-size: 12px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
 }
 .expoItem {
   padding: 5px;
-  font-size: 17px;
+  font-size: 12px;
   overflow: hidden;
   text-align: left;
   justify-content: left;
@@ -176,7 +177,8 @@ input[type="text"]{
 }
 
 img {
-  width: 100%;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
 }
 

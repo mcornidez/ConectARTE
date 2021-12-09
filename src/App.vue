@@ -51,7 +51,7 @@ export default {
   background-color: black;
   color: white;
   padding: 10px;
-  font-size: 16px;
+  font-size: 14px;
 }
 </style>
 
