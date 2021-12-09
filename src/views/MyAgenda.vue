@@ -16,8 +16,13 @@
                 <img :src='exposition.image'/>
               </div>
               <div class="expoItem">
-                <h2>{{exposition.name}}</h2>
+                <p>{{ exposition.initdate }} - {{ exposition.enddate }}</p>
+                <h2>{{exposition.name}} - {{exposition.artist}}</h2>
                 <p>{{exposition.description}}</p>
+                <div style="float: left">
+                  <v-icon>mdi-thumb-up</v-icon>
+                  <span> {{exposition.likes}} me gusta</span>
+                </div>
               </div>
             </div>
           </div>
@@ -79,6 +84,11 @@ export default {
           this.expositions.push(data);
         }
       }
+      this.expositions.sort(function(a, b){
+        if(a.enddate < b.enddate) { return -1; }
+        if(a.enddate > b.enddate) { return 1; }
+        return 0;
+      })
       this.loading = false;
     },
   },

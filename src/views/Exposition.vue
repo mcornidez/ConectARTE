@@ -4,14 +4,14 @@
       <br/>
       <b>{{ exposition.name }}</b>
     </div>
-    <div style="text-align: left; max-width: 90vw; margin-left: auto; margin-right: auto;">
-      <v-icon>mdi-thumb-up</v-icon>
-      <span> {{exposition.likes}} me gusta</span>
-    </div>
     <div class="expo-container">
       <div class="expo-item">
         <div class="expo-img">
           <img :src='exposition.image'/>
+        </div>
+        <div style="text-align: left;">
+          <v-icon>mdi-thumb-up</v-icon>
+          <span> {{exposition.likes}} me gusta</span>
         </div>
         <div class="expo-descr">
           <p>{{ exposition.description }}</p>
@@ -129,6 +129,7 @@ export default {
 
 img {
   max-width: 40%;
+  min-width: 40%;
   height: auto;
   float: left;
 }
@@ -146,6 +147,7 @@ input[type="text"] {
 }
 
 .home-item {
+  flex-basis: 100%;
   font-size: 17px;
   margin-left: 10%;
   margin-top: 25px;
@@ -153,6 +155,7 @@ input[type="text"] {
 }
 
 .expo-item {
+  flex-basis: 100%;
   display: grid;
   width: 60%;
   grid-template-columns: repeat(1, minmax(0, 1fr));

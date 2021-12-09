@@ -53,27 +53,6 @@
           <label for="name">Descripción del artista: </label>
           <input v-model="exhibition.artistDesc" type="text" id="artistDesc" placeholder="Ingrese breve descripción" class="input" required/>
         </div>
-
-
-      <!--
-      <label for="pictures">Subir imágenes: </label>
-      <div class="input">
-        <input multiple type="file" ref="files" id="pictures" @change="OnFileSelected"/>
-        <div v-for="(file, index) in files" :key="index">
-          <div class="level-left">
-            <div class="level-item">
-              {{file.name}}
-              <span v-if="file.invalidMessage"> &nbsp;- {{file.invalidMessage}}</span>
-            </div>
-          </div>
-          <div class="level-right">
-            <div class="level-item">
-              <a @click.prevent="files.splice(index, 1); uploadFiles.splice(index, 1);" class="delete"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      -->
     <br>
     <div class="pageSubtitle">
       <br>

@@ -17,7 +17,8 @@
                     <img :src='exposition.image'/>
                   </div>
                   <div class="expoItem">
-                    <h2>{{exposition.name}}</h2>
+                    <p>{{ exposition.initdate }} - {{ exposition.enddate }}</p>
+                    <h2>{{exposition.name}} - {{exposition.artist}}</h2>
                     <p>{{exposition.description}}</p>
                     <div style="float: left">
                       <v-icon>mdi-thumb-up</v-icon>

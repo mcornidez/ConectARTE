@@ -52,13 +52,6 @@
       class="btn">
     <span class="font">Contactanos</span>
   </v-btn>
-  <v-btn
-      :to="{name: 'Profile'}"
-      text
-      v-show="$isLoggedIn"
-      class="btn">
-    <span class="font">Mi Perfil</span>
-  </v-btn>
 </div>
 
 <v-spacer></v-spacer>
@@ -79,6 +72,13 @@
       class="btn">
     <v-icon style="color: white; font-size:35px;">mdi-account-outline</v-icon>
     <span class="font">Registrate</span>
+  </v-btn>
+  <v-btn
+      :to="{name: 'Profile'}"
+      text
+      v-show="$isLoggedIn"
+      class="btn">
+    <span class="font">Mi Perfil</span>
   </v-btn>
   <v-btn
       v-show="$isLoggedIn"

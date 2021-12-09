@@ -90,6 +90,11 @@ export default {
         title: "Royal Academy of Arts (Real Academia de Artes)",
         address: "Burlington House, Piccadilly, London W1J 0BD, Reino Unido",
         link: "https://www.eyerevolution.co.uk/tours/SensingSpaces/"
+      },{
+        position: {lat: -34.584056, lng: -58.392806},
+        title: "Museo Nacional de Bellas Artes",
+        address: "Av. del Libertador 1473, Buenos Aires, Argentina",
+        link: "https://www.flickr.com/photos/186501806@N04/albums/72157718149713561"
       },
       ]
     }

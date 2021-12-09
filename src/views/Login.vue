@@ -43,8 +43,11 @@ export default {
   methods: {
     async login() {
       const auth = getAuth();
-      await signInWithEmailAndPassword(auth, this.email, this.password);
-      this.$router.push({name: 'MyAgenda'});
+      await signInWithEmailAndPassword(auth, this.email, this.password).then(this.$router.push({name: 'MyAgenda'}))
+          .catch(error => {
+            alert("Mail o contraseña inválidos");
+            this.error = error;
+          })
     },
   },
 }
